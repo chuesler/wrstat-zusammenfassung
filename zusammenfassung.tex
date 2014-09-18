@@ -1,0 +1,20 @@
+\documentclass[10pt,a4paper]{scrartcl}
+
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+\section{Kombinatorik}
+\begin{description}
+\item[Permutation] Auf wieviele Arten kann man n verschiedene Objekte anordnen? \\
+    $n!$ Möglichkeiten
+\item[Kombination] Auf wieviele Arten kann man k Objekte aus n auswählen? Jedes Objekt kann nur einmal gewählt werden: 
+    \begin{itemize}
+    \item $n$ Möglichkeiten für das 1. Objekt
+    \item $\frac{n(n-1)}{1\cdot2}$ Möglichkeiten für das 2. Objekt
+    \item $\frac{n(n-1)\cdots(n-k+1)}{1 \cdot 2 \cdots k} = \frac{n!}{k!(n-k)!} = {n \choose k}$ Möglichkeiten für das k-te Objekt. \\
+    Die erste dieser Formeln ist gut geeignet zur Umsetzung in Integer, da Divisionen immer aufgehen und Zwischenresultate  ``klein'' bleiben.
+    \end{itemize}
+\item[Produktregel] Auf wieviele Arten kann man k mal eine Auswahl aus n Objekten treffen? Es gibt keine Limitation für das 2. Objekt, nachdem das 1. gewählt wurde (z.B. Glasperlen auf Kette).
+\end{description}
+\end{document} 
