@@ -1,27 +1,23 @@
 \documentclass[10pt,a4paper]{scrartcl}
 
+\usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}
 \usepackage[utf8]{inputenc}
 
 \usepackage[margin=2.5cm]{geometry}
 
 \title{Wahrscheinlichkeitsrechnung und Statistik}
-\author{Christoph Hüsler \langle chuesler@hsr.ch\rangle} % feel free to add yourself here :)
+\author{Christoph H\"usler $\langle$chuesler@hsr.ch$\rangle$ } 
 
 \begin{document}
 \maketitle
-
 \section{Kombinatorik}
 \begin{description}
-\item[Produktregel] Auswahl von k aus n Objekten, die einzelnen Elemente sind {\em unabhängig} voneinander: $$n^k$$
+\item[Produktregel] Auswahl von k aus n Objekten, die einzelnen Elemente sind \emph{unabhängig} voneinander: $$n^k$$
 \item[Permutation] Mögliche Anordnungen (Reihenfolge, Permutation) von n Objekten $$n!$$
 \item[Kombination] Auswahl von k aus n Objekten, wobei jedes Objekt nur einmal gewählt werden kann:
-    \begin{itemize}
-    \item $n$ Möglichkeiten für das 1. Objekt
-    \item $\frac{n(n-1)}{1\cdot2}$ Möglichkeiten für das 2. Objekt
-    \item $\frac{n(n-1)\cdots(n-k+1)}{1 \cdot 2 \cdots k} = \frac{n!}{k!(n-k)!} = {n \choose k}$ Möglichkeiten für das k-te Objekt. \\
-    Die erste dieser Formeln ist gut geeignet zur Umsetzung in Integer, da Divisionen immer aufgehen und Zwischenresultate  ``klein'' bleiben.
-    \end{itemize}
+    $$\frac{n(n-1)\cdots(n-k+1)}{1 \cdot 2 \cdots k} = \frac{n!}{k!(n-k)!} = {n \choose k}$$
+    Die erste dieser Formeln ist gut geeignet zur Umsetzung in Integer, da Divisionen immer aufgehen und Zwischenresultate ``klein'' bleiben.
 \end{description}
 
 Für kompliziertere Situationen, z.B. mit Nebenbedingungen, lässt sich oft Symmetrie ausnutzen.
@@ -37,7 +33,7 @@ Die erzeugende Funktion sieht wie folgt aus (geometrische Reihe): $$1 + 1x + 1x^
 $$1 + 0x + \dots + 1x^5 + 0x^6 + \dots + 1x^{10} + \dots = $$ $$1 + x^5 + x^{10} + x^{15} + \cdots = \frac{1}{1-x^5}$$
 
 \paragraph{Interpretation}
-Der Koeffizient $a$ von $ax^k$ sagt mir, auf wie viele Arten ich einen Betrag von k Fr. darstellen kann. Das Produkt der beiden Reihen kombiniert dann die 1 Fr. und 5 Fr. Varianten (analog erweiterbar für weitere Beträge):
+Der Koeffizient $a$ von $ax^k$ sagt aus, auf wie viele Arten ein Betrag von k Fr.\ gebildet werden kann. Das Produkt der beiden Reihen kombiniert dann die 1 Fr.\ und 5 Fr. Varianten (analog erweiterbar für weitere Münzen):
 $$taylor\left(\frac{1}{(1-x)(1-x^5)}, 0\right) = 1 + x + x^2 + x^3 + x^4 + 2x^5 + 2x^6 + \dots + 3x^{10} + \dots$$
 
 Äquivalent kann das Problem auch als Serie von Vektoren ausgedrückt werden, welche per Faltung (Convolution) kombiniert werden.
