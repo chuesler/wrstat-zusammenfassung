@@ -3,18 +3,42 @@
 \usepackage[ngerman]{babel}
 \usepackage[utf8]{inputenc}
 
+\usepackage[margin=2.5cm]{geometry}
+
+\title{Wahrscheinlichkeitsrechnung und Statistik}
+\author{Christoph Hüsler \langle chuesler@hsr.ch\rangle} % feel free to add yourself here :)
+
 \begin{document}
+\maketitle
+
 \section{Kombinatorik}
 \begin{description}
-\item[Permutation] Auf wieviele Arten kann man n verschiedene Objekte anordnen? \\
-    $n!$ Möglichkeiten
-\item[Kombination] Auf wieviele Arten kann man k Objekte aus n auswählen? Jedes Objekt kann nur einmal gewählt werden: 
+\item[Produktregel] Auswahl von k aus n Objekten, die einzelnen Elemente sind {\em unabhängig} voneinander: $$n^k$$
+\item[Permutation] Mögliche Anordnungen (Reihenfolge, Permutation) von n Objekten $$n!$$
+\item[Kombination] Auswahl von k aus n Objekten, wobei jedes Objekt nur einmal gewählt werden kann:
     \begin{itemize}
     \item $n$ Möglichkeiten für das 1. Objekt
     \item $\frac{n(n-1)}{1\cdot2}$ Möglichkeiten für das 2. Objekt
     \item $\frac{n(n-1)\cdots(n-k+1)}{1 \cdot 2 \cdots k} = \frac{n!}{k!(n-k)!} = {n \choose k}$ Möglichkeiten für das k-te Objekt. \\
     Die erste dieser Formeln ist gut geeignet zur Umsetzung in Integer, da Divisionen immer aufgehen und Zwischenresultate  ``klein'' bleiben.
     \end{itemize}
-\item[Produktregel] Auf wieviele Arten kann man k mal eine Auswahl aus n Objekten treffen? Es gibt keine Limitation für das 2. Objekt, nachdem das 1. gewählt wurde (z.B. Glasperlen auf Kette).
 \end{description}
+
+Für kompliziertere Situationen, z.B. mit Nebenbedingungen, lässt sich oft Symmetrie ausnutzen.
+
+\subsection{Erzeugende Funktion}
+Schwierige kombinatorische Fragestellungen lassen sich oft in eine algebraisches oder analytisches Problem umformulieren, welches wir per Computer lösen können.
+
+\paragraph{Beispiel} Bildung eines Betrags aus 1 und 5 Fr. Münzen.
+\paragraph{Teilaufgabe 1} Es gibt 1 Variante, den Betrag mit 1 Fr. Münzen zu bilden.
+Die erzeugende Funktion sieht wie folgt aus (geometrische Reihe): $$1 + 1x + 1x^2 + 1x^3 + 1x^4 + \dots = \frac{1}{1-x}$$ 
+
+\paragraph{Teilaufgabe 2} Wenn der Betrag durch 5 teilbar ist, gibt es genau eine Art den Betrag mit 5 Fr. Münzen zu bilden, wenn nicht, keine.
+$$1 + 0x + \dots + 1x^5 + 0x^6 + \dots + 1x^{10} + \dots = $$ $$1 + x^5 + x^{10} + x^{15} + \cdots = \frac{1}{1-x^5}$$
+
+\paragraph{Interpretation}
+Der Koeffizient $a$ von $ax^k$ sagt mir, auf wie viele Arten ich einen Betrag von k Fr. darstellen kann. Das Produkt der beiden Reihen kombiniert dann die 1 Fr. und 5 Fr. Varianten (analog erweiterbar für weitere Beträge):
+$$taylor\left(\frac{1}{(1-x)(1-x^5)}, 0\right) = 1 + x + x^2 + x^3 + x^4 + 2x^5 + 2x^6 + \dots + 3x^{10} + \dots$$
+
+Äquivalent kann das Problem auch als Serie von Vektoren ausgedrückt werden, welche per Faltung (Convolution) kombiniert werden.
 \end{document} 
