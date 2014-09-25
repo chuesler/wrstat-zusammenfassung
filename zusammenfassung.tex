@@ -4,6 +4,8 @@
 \usepackage[ngerman]{babel}
 \usepackage[utf8]{inputenc}
 
+\usepackage{amssymb}
+
 \usepackage[margin=2.5cm]{geometry}
 
 \title{Wahrscheinlichkeitsrechnung und Statistik}
@@ -37,4 +39,48 @@ Der Koeffizient $a$ von $ax^k$ sagt aus, auf wie viele Arten ein Betrag von k Fr
 $$taylor\left(\frac{1}{(1-x)(1-x^5)}, 0\right) = 1 + x + x^2 + x^3 + x^4 + 2x^5 + 2x^6 + \dots + 3x^{10} + \dots$$
 
 Äquivalent kann das Problem auch als Serie von Vektoren ausgedrückt werden, welche per Faltung (Convolution) kombiniert werden.
+
+\section{Ereignisse und ihre Wahrscheinlichkeit}
+\subsection{Ereignis}
+Ein Ereignis ist immer verbunden mit einem (wiederholbaren) Experiment. Entscheidend ist der Versuchsausgang.
+
+$$\Omega = \mbox{Menge der Elementar-Ereignisse} = \left\{ \mbox{alle möglichen Versuchsausgäng}e \right\}$$
+\paragraph{Beispiele}
+\begin{description}
+\item[7er-Würfel] $$\Omega = \left\{ 1, 2, 3, 4, 5, 6, 7 \right\}$$
+\item[2 6er-Würfel] $$\Omega = \left[1, 2, 3, 4, 5, 6\right] \times \left[1, 2, 3, 4 ,5, 6\right]$$
+\end{description}
+
+Es können auch kompliziertere Ereignisse $A \subset \Omega$ definiert werden.
+$$G = \mbox{``gerade Zahl gewúrfelt''} = \{2, 4, 6\}$$
+$$U = \mbox{``ungerade Zahl gewúrfelt''} = \{1, 3, 5, 7\}$$
+$$P = \mbox{``Primzahl gewúrfelt''} = \{2, 3, 5, 7\}$$
+
+\subsection{Wahrscheinlichkeit}
+Wir brauchen eine ``Übersetzungstabelle'' von der Alltagssprache in die Mengensprache. \\
+
+\begin{tabular}{cc}
+Ereignis A eingetreten & Versuchsausgang $\omega \in A$ \\ 
+Ereignis A ist unmöglich & $\forall \omega \notin A \ \Rightarrow \ A = \varnothing \ \mbox{(das unmögliche Ereignis)}$  \\ 
+Ereignis A trifft sicher ein & $\forall \omega \in A \ \Rightarrow \ A = \Omega \ \mbox{(das sichere Ereignis)}$ \\ 
+A und B & $A \cap B$ \\ 
+A oder B & $A \cup B$ \\ 
+nicht A & $\Omega \setminus A$ \\ 
+wenn A dann B & $A \subset B$  \\ 
+\end{tabular}
+
+Die Wahrscheinlichkeit eines Ereignisses $A$ wird geschrieben als $P(A)$. \\
+
+$$P(A) = \lim_{\mbox{\#Versuche} \rightarrow \infty} \frac{\mbox{Anzahl Eintreten von A}}{\mbox{Anzahl Versuche}}$$
+Beispiel fairer Würfel: $$P(\{7\}) = \frac{1}{7},\ P(G) = \frac{3}{7}, \ P(\varnothing) = 0, \ P(\Omega) = 1$$
+
+\begin{tabular}{cc}
+$A \subset B$ & $P(A) \leq P(B)$ \\
+$\varnothing \subset A \subset \Omega$ & $0 = P(\varnothing) \leq P(A) \leq P(\Omega) = 1$ \\
+$\bar{A}$ & $P(\bar{A}) + P(A) = 1 \Rightarrow P(\bar{A}) = 1 - P(A)$ \\
+$A \cup B$ & $ P(A\cup B) = P(A) + P(B) - P(A\cap B)$ \\
+$A \cap B$ & Für diesen Fall gibt es keine Formel, wenn A und B korreliert sind.
+\end{tabular}
+
+
 \end{document} 
