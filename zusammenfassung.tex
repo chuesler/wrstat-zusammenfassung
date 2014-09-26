@@ -45,42 +45,50 @@ $$taylor\left(\frac{1}{(1-x)(1-x^5)}, 0\right) = 1 + x + x^2 + x^3 + x^4 + 2x^5 
 Ein Ereignis ist immer verbunden mit einem (wiederholbaren) Experiment. Entscheidend ist der Versuchsausgang.
 
 $$\Omega = \mbox{Menge der Elementar-Ereignisse} = \left\{ \mbox{alle möglichen Versuchsausgäng}e \right\}$$
-\paragraph{Beispiele}
-\begin{description}
-\item[7er-Würfel] $$\Omega = \left\{ 1, 2, 3, 4, 5, 6, 7 \right\}$$
-\item[2 6er-Würfel] $$\Omega = \left[1, 2, 3, 4, 5, 6\right] \times \left[1, 2, 3, 4 ,5, 6\right]$$
-\end{description}
-
+Ein Ereignis ist eine Teilmenge von $\Omega$. Die Menge aller Ereignisse ist also die Menge aller Teilmengen von $\Omega$ (auch wenn viele davon unmöglich sind). \\
+Beispiel: 7er-Würfel: $\Omega = \left\{ 1, 2, 3, 4, 5, 6, 7 \right\}$, 
+2 6er-Würfel: $\Omega = \left[1, 2, 3, 4, 5, 6\right] \times \left[1, 2, 3, 4 ,5, 6\right]$
+\\ \linebreak
 Es können auch kompliziertere Ereignisse $A \subset \Omega$ definiert werden.
 $$G = \mbox{``gerade Zahl gewúrfelt''} = \{2, 4, 6\}$$
 $$U = \mbox{``ungerade Zahl gewúrfelt''} = \{1, 3, 5, 7\}$$
 $$P = \mbox{``Primzahl gewúrfelt''} = \{2, 3, 5, 7\}$$
 
 \subsection{Wahrscheinlichkeit}
-Wir brauchen eine ``Übersetzungstabelle'' von der Alltagssprache in die Mengensprache. \\
+Wir brauchen eine ``Übersetzungstabelle'' von der Alltagssprache in die Mengensprache. 
 
+\begin{center}
 \begin{tabular}{cc}
 Ereignis A eingetreten & Versuchsausgang $\omega \in A$ \\ 
-Ereignis A ist unmöglich & $\forall \omega \notin A \ \Rightarrow \ A = \varnothing \ \mbox{(das unmögliche Ereignis)}$  \\ 
-Ereignis A trifft sicher ein & $\forall \omega \in A \ \Rightarrow \ A = \Omega \ \mbox{(das sichere Ereignis)}$ \\ 
+Ereignis A ist unmöglich & $\forall \omega: \omega \notin A \ \Rightarrow \ A = \varnothing \ \mbox{(das unmögliche Ereignis)}$  \\ 
+Ereignis A trifft sicher ein & $\forall \omega: \omega \in A \ \Rightarrow \ A = \Omega \ \mbox{(das sichere Ereignis)}$ \\ 
 A und B & $A \cap B$ \\ 
 A oder B & $A \cup B$ \\ 
 nicht A & $\Omega \setminus A$ \\ 
 wenn A dann B & $A \subset B$  \\ 
 \end{tabular}
+\end{center}
 
-Die Wahrscheinlichkeit eines Ereignisses $A$ wird geschrieben als $P(A)$. \\
+Die Wahrscheinlichkeit eines Ereignisses $A$ wird geschrieben als $P(A)$.
 
-$$P(A) = \lim_{\mbox{\#Versuche} \rightarrow \infty} \frac{\mbox{Anzahl Eintreten von A}}{\mbox{Anzahl Versuche}}$$
-Beispiel fairer Würfel: $$P(\{7\}) = \frac{1}{7},\ P(G) = \frac{3}{7}, \ P(\varnothing) = 0, \ P(\Omega) = 1$$
+$$P(A) = \lim_{\mbox{\footnotesize\#Versuche} \rightarrow \infty} \frac{\mbox{Anzahl Eintreten von A}}{\mbox{Anzahl Versuche}}$$
 
+Beispiel fairer (7er-)Würfel: $$P(\{7\}) = \frac{1}{7},\ P(G) = \frac{3}{7}, \ P(\varnothing) = 0, \ P(\Omega) = 1$$
+
+Die gemessenen Werte konvergieren mit einem Fehler der Grössenordnung $\frac{1}{\sqrt{n}}$ (eine Nachkommastelle mehr entspricht $10^2$ mal mehr Experimenten).
+
+\subsubsection{Formeln für Wahrscheinlichkeiten} 
+
+\begin{center}
 \begin{tabular}{cc}
 $A \subset B$ & $P(A) \leq P(B)$ \\
 $\varnothing \subset A \subset \Omega$ & $0 = P(\varnothing) \leq P(A) \leq P(\Omega) = 1$ \\
-$\bar{A}$ & $P(\bar{A}) + P(A) = 1 \Rightarrow P(\bar{A}) = 1 - P(A)$ \\
+$\bar{A}$ & $P(\bar{A}) + P(A) = 1 \Rightarrow P(\bar{A}) = P(\Omega \setminus A) = 1 - P(A)$ \\
 $A \cup B$ & $ P(A\cup B) = P(A) + P(B) - P(A\cap B)$ \\
 $A \cap B$ & Für diesen Fall gibt es keine Formel, wenn A und B korreliert sind.
 \end{tabular}
+\end{center}
 
+Intuition für diese Regeln ist die ``Flächenmessung'' (manchmal tatsächlich der Fall, z.B. Dartspiel).
 
 \end{document} 
