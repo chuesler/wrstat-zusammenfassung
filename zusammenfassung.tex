@@ -8,6 +8,8 @@
 
 \usepackage[margin=2.5cm]{geometry}
 
+\renewcommand{\arraystretch}{1.2}
+
 \title{Wahrscheinlichkeitsrechnung und Statistik}
 \author{Christoph H\"usler $\langle$chuesler@hsr.ch$\rangle$ } 
 
@@ -66,6 +68,7 @@ A und B & $A \cap B$ \\
 A oder B & $A \cup B$ \\ 
 nicht A & $\Omega \setminus A$ \\ 
 wenn A dann B & $A \subset B$  \\ 
+A unter der Bedingung B & $A\ |\ B$ \\
 \end{tabular}
 \end{center}
 
@@ -85,7 +88,10 @@ $A \subset B$ & $P(A) \leq P(B)$ \\
 $\varnothing \subset A \subset \Omega$ & $0 = P(\varnothing) \leq P(A) \leq P(\Omega) = 1$ \\
 $\bar{A}$ & $P(\bar{A}) + P(A) = 1 \Rightarrow P(\bar{A}) = P(\Omega \setminus A) = 1 - P(A)$ \\
 $A \cup B$ & $ P(A\cup B) = P(A) + P(B) - P(A\cap B)$ \\
-$A \cap B$ & Für diesen Fall gibt es keine Formel, wenn A und B korreliert sind.
+$A \cap B$ & Wenn A und B unabhängig: $P(A)P(B)$, sonst keine Formel \\
+A, B unabhängig & $P(A\cap B) = P(A)P(B)$\\[2pt]
+$A\ |\ B$ & $P(A\ |\ B) = \frac{P(A\cap B)}{P(B)}$ \\[2pt]
+$A\ |\ B$ wenn $A\ |\ B_i$ vorliegen & $ P(A\ |\ B) = \sum_{i=1}^n \frac{P(A\ |\ B_i)}{P(B_i)} P(B_i) $
 \end{tabular}
 \end{center}
 
