@@ -97,4 +97,105 @@ $A\ |\ B$ wenn $A\ |\ B_i$ vorliegen & $ P(A\ |\ B) = \sum_{i=1}^n \frac{P(A\ |\
 
 Intuition für diese Regeln ist die ``Flächenmessung'' (manchmal tatsächlich der Fall, z.B. Dartspiel).
 
-\end{document} 
+%I still can't compile tex to pdf :< That's why I haven't pushed any changes. Very sorry. Uncompiled and untested stuff follows...
+
+\subsection{DNA-Test vor Gericht}
+Mögliche Ereignisse:
+\begin{itemize}
+\item $D$ = DNA-Test liefert eine Übereinstimmung
+\item $T$ = Angeklagter ist Täter
+\end{itemize}
+
+Anklage: $P(D|T)$ //"Wenn es der Täter ist, muss das Ergebnis mit seiner DNA übereinstimmen"
+Gericht: $P(T|D)$ // Wie wahrscheinlich ist die Übereinstimmung, wenn der Test Ja sagt.
+Firma: $P(D|T)$  // testet, ob DNA-Test bei Übereinstimmung Ja sagt.
+
+Wir wollen eine Schlussumkehr. --> Frage: Wie kommt man von dem, was die Firma gemessen hat, zu dem Umgekehrten, wie kommt man von $P(D|T)$ zu $P(T|D)$?
+
+$P(A \cap B)$ = $P(B|A)$*$P(A)$ = $P(A|B)$*$P(B)$
+
+Schlussfolgerung:
+$P(A|B)$ = $P(B|A)$ * \frac{$P(A)$}{$P(B)$}
+$P(B|A)$ = $P(A|B)$ * \frac{$P(B)$}{$P(A)$}
+
+= Satz von Bayes
+
+Im Gerichtssaal: $P(T|D)$ = $P(D|T)$ * \frac{$P(T)$}{$P(D)$}
+Für ein wasserdichtes Alibi gilt: $P(T)$ = 0 --> $P(T|D)$ = 0 // Wasserdichtes Alibi schlägt DNA-Test
+
+Je grösser $P(D)$ (die Übereinstimmung von Samples bei Tests, z.B. bei Blutgruppen-Test), desto kleiner $P(T|D)$, also die Wahrscheinlichkeit, dass man von diesem Test auf den Täter schliessen kann.
+
+
+\subsection{HIV-Test}
+2 Ereignisse:
+\begin{itemize}
+\item $H$ = hat Krankheit
+\item $T$ = Test zeigt HIV an
+\end{itemize}
+«b
+$P(H)$ = 0.0001
+$P(T|H)$ = 0.999 // Wahrscheinlichkeit, dass ein Test HIV bei einer infizierten Person anzeigt
+$P(\bar{T}|\bar{H})$ = 0.9999 // Wahrscheinlichkeit, dass Test NICHT HIV anzeigt, wenn die Person NICHT infiziert ist.
+
+aber $P(H|T)$ = $P(T|H)$ * \frac{$P(H)$}{$P(T)$}
+
+$P(T)$ = $P(T|H)$*$P(H)$ + $P(T|\bar{H})$ * $P(\bar{H})$
+	 = 0.999 * 0.0001 + (1-0.9999) * (1-0.0001)
+	 = 0.00019989 = \approx 0.0002
+
+$P(H|T)$ = 0.999 * \frac{0.0001}{0.0002} \approx 0.5
+
+
+Umgekehrt:
+$P(\bar{H}|\bar{T})$ = $P(\bar{T}|\bar{H})$*\frac{$P(\bar{H})$}{$P(\bar{T})$}
+ = 0.9999 * \frac{0.9999}{0.9998} \approx 1
+
+\subsection{Karies bei Kindern + Schokoladenkonsum}
+%Prüfungsaufgabe
+$Z$ = {schlechte Zähne}
+$S$ = {Schoggikonsum}
+
+Wir wissen:
+\begin{itemize}
+\item $P(Z)$ = 0.06
+\item $P(S|Z)$ = \frac{2}{3}
+\item $P(S|\bar{Z})$ = 0.17
+\end{itemize}
+
+Gesucht: $P(Z|S)$ = $P(S|Z)$ * \frac{$P(Z)$}{$P(S)$}
+Noch unbekannt: $P(S)$ --> Totale Wahrscheinlichkeit $P(S|Z)$ * $P(Z)$ + $P(S|\bar{Z})$ * $P(\bar{Z})$
+ = \frac{2}{3} * 0.06 + 0.17 (1-0.06) = 0.1998 \approx 20\%
+
+ $P(Z|S)$ = \frac{2}{3} * \frac{0.06}{0.2} = 20\%
+
+
+\subsection{Ziegen und Autos}
+3 Türen: 1 Auto, 2 Ziegen
+1 von 3 Türen wählen
+2 Strategien: Bleiben, Wechseln
+
+Ereignisse:
+\begin{itemize}
+\item $G$ = {Auto gewonnen}
+\item $A$ = {erste Wahl war ein Auto} = \bar{Z}
+\item $Z$ = {erste Wahl war eine Ziege}
+\end{itemize}
+
+Finde Gewinnwahrscheinlichkeit
+$P(G)$ = P(G|A) * P(A) + P(G|Z) * P(Z)
+
+Strategie \"Bleiben\": 1 * \frac{1}{3} + 0 * \frac{2}{3} = \frac{1}{3}
+Strategie \"Wechseln\": 0 * \frac{1}{3} + 1 * \frac{2}{3} = \frac{2}{3}
+
+--> \"Wechseln\" ist doppelt so gut wie \"Bleiben\".
+
+\subsubsection{Strategie mit Münzwurf festgelegt}
+$B$: Bleibstrategie wurde gewählt
+$W$: Wechselstrategie wurde gewählt
+
+$P(G)$ = $P(G|B)$*$P(B)$ + $P(G|W)$*$P(W)$
+	= \frac{1}{3}*\frac{1}{2} + \frac{2}{3}*\frac{1}{2} = \frac{1}{2}
+
+Optimale Strategie: Immer wechseln.
+
+\end{document}
