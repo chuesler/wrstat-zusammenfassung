@@ -21,7 +21,7 @@
 \item[Produktregel] Auswahl von k aus n Objekten, die einzelnen Elemente sind \emph{unabhängig} voneinander: $$n^k$$
 \item[Permutation] Mögliche Anordnungen (Reihenfolge, Permutation) von n Objekten $$n!$$
 \item[Kombination] Auswahl von k aus n Objekten, wobei jedes Objekt nur einmal gewählt werden kann:
-    $$\frac{n(n-1)\cdots(n-k+1)}{1 \cdot 2 \cdots k} = \frac{n!}{k!(n-k)!} = {n \choose k}$$
+    $$\frac{n(n-1)\cdots(n-k+1)}{1 \cdot 2 \cdots k} = \frac{n!}{k!(n-k)!} = \binom{n}{k}$$
     Die erste dieser Formeln ist gut geeignet zur Umsetzung in Integer, da Divisionen immer aufgehen und Zwischenresultate ``klein'' bleiben.
 \end{description}
 
@@ -116,7 +116,7 @@ Wir wollen eine Schlussumkehr: Wie kommt man von $P(D|T)$ zu $P(T|D)$?
 $$P(A \cap B) = P(B|A) \cdot P(A) = P(A|B) \cdot P(B)$$
 
 Schlussfolgerung:
-$$P(A|B) &= P(B|A) \cdot \frac{P(A)}{P(B)}\quad \mbox{und} \quad P(B|A) &= P(A|B) \cdot \frac{P(B)}{P(A)}$$
+$$P(A|B) = P(B|A) \cdot \frac{P(A)}{P(B)}\quad \mbox{und} \quad P(B|A) = P(A|B) \cdot \frac{P(B)}{P(A)}$$
 
 Dies ist der \emph{Satz von Bayes}.
 
@@ -156,27 +156,30 @@ $$P(\bar{H}|\bar{T}) = P(\bar{T}|\bar{H}) \cdot \frac{P(\bar{H})}{P(\bar{T})}
 
 \subsection{Karies bei Kindern + Schokoladenkonsum}
 %Prüfungsaufgabe
-$Z$ = {schlechte Zähne}
-$S$ = {Schoggikonsum}
-
-Wir wissen:
+Mögliche Ereignisse
 \begin{itemize}
-\item $P(Z) = 0.06$
-\item $P(S|Z) = \frac{2}{3}$
-\item $P(S|\bar{Z}) = 0.17$
+\item $Z$ = {schlechte Zähne}
+\item $S$ = {Schoggikonsum}
 \end{itemize}
 
-Gesucht: $P(Z|S) = P(S|Z) \cdot \frac{P(Z)}{P(S)}$
-Noch unbekannt: $P(S)$ Totale Wahrscheinlichkeit $= P(S|Z) \cdot P(Z) + P(S|\bar{Z}) \cdot P(\bar{Z})
- = \frac{2}{3} \cdot 0.06 + 0.17 (1-0.06) = 0.1998 \approx 20\%$
+Wir wissen:
+$$P(Z) = 0.06 \qquad P(S|Z) = \frac{2}{3} \qquad P(S|\bar{Z}) = 0.17$$
 
- $P(Z|S) = \frac{2}{3} \cdot \frac{0.06}{0.2} = 20\%$
-
+Gesucht: $$P(Z|S) = P(S|Z) \cdot \frac{P(Z)}{P(S)}$$
+Noch unbekannt: 
+\begin{align*}
+\mbox{Totale Wahrscheinlichkeit} \ P(S) & = P(S|Z) \cdot P(Z) + P(S|\bar{Z}) \cdot P(\bar{Z}) \\
+ & = \frac{2}{3} \cdot 0.06 + 0.17 (1-0.06) \\
+ & = 0.1998 \approx 20\% \\
+ P(Z|S) &= \frac{2}{3} \cdot \frac{0.06}{0.2} = 20\%
+\end{align*}
 
 \subsection{Ziegen und Autos}
-3 Türen: 1 Auto, 2 Ziegen
-1 von 3 Türen wählen
-2 Strategien: Bleiben, Wechseln
+\begin{itemize}
+\item 3 Türen: 1 Auto, 2 Ziegen
+\item 1 von 3 Türen wählen
+\item 2 Strategien: Bleiben, Wechseln
+\end{itemize}
 
 Ereignisse:
 \begin{itemize}
@@ -186,20 +189,23 @@ Ereignisse:
 \end{itemize}
 
 Finde Gewinnwahrscheinlichkeit
-$P(G) = P(G|A) \cdot P(A) + P(G|Z) \cdot P(Z)$
-
-Strategie ``Bleiben'': $1 \cdot \frac{1}{3} + 0 \cdot \frac{2}{3} = \frac{1}{3}$
-Strategie ``Wechseln'': $0 \cdot \frac{1}{3} + 1 \cdot \frac{2}{3} = \frac{2}{3}$
-
---> \"Wechseln\" ist doppelt so gut wie \"Bleiben\".
+$$P(G) = P(G|A) \cdot P(A) + P(G|Z) \cdot P(Z)$$
+\begin{description}
+\item[Strategie ``Bleiben''] $1 \cdot \frac{1}{3} + 0 \cdot \frac{2}{3} = \frac{1}{3}$
+\item[Strategie ``Wechseln''] $0 \cdot \frac{1}{3} + 1 \cdot \frac{2}{3} = \frac{2}{3}$
+\end{description}
+$\rightarrow$ ``Wechseln'' ist doppelt so gut wie ``Bleiben''.
 
 \subsubsection{Strategie mit Münzwurf festgelegt}
-$B$: Bleibstrategie wurde gewählt
-$W$: Wechselstrategie wurde gewählt
-
-$P(G) = P(G|B) \cdot P(B) + P(G|W) \cdot P(W)
-	= \frac{1}{3}\cdot\frac{1}{2} + \frac{2}{3}\cdot\frac{1}{2} = \frac{1}{2}$
-
+\begin{itemize}
+\item $B$: Bleibstrategie wurde gewählt
+\item $W$: Wechselstrategie wurde gewählt
+\end{itemize}
+\begin{align*}
+P(G) & = P(G|B) \cdot P(B) + P(G|W) \cdot P(W) \\
+	& = \frac{1}{3}\cdot\frac{1}{2} + \frac{2}{3}\cdot\frac{1}{2} \\
+    & = \frac{1}{2}
+\end{align*}
 Optimale Strategie: Immer wechseln.
 
 \end{document}
