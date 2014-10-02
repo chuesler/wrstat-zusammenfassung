@@ -5,6 +5,7 @@
 \usepackage[utf8]{inputenc}
 
 \usepackage{amssymb}
+\usepackage{amsmath}
 
 \usepackage[margin=2.5cm]{geometry}
 
@@ -97,58 +98,61 @@ $A\ |\ B$ wenn $A\ |\ B_i$ vorliegen & $ P(A\ |\ B) = \sum_{i=1}^n \frac{P(A\ |\
 
 Intuition für diese Regeln ist die ``Flächenmessung'' (manchmal tatsächlich der Fall, z.B. Dartspiel).
 
-%I still can't compile tex to pdf :< That's why I haven't pushed any changes. Very sorry. Uncompiled and untested stuff follows...
-
 \subsection{DNA-Test vor Gericht}
 Mögliche Ereignisse:
 \begin{itemize}
-\item $D$ = DNA-Test liefert eine Übereinstimmung
-\item $T$ = Angeklagter ist Täter
+\item $D$ = DNA am Tatort entspricht DNA des Angeklagten
+\item $T$ = Test zeigt Übereinstimmung
 \end{itemize}
 
-Anklage: $P(D|T)$ //"Wenn es der Täter ist, muss das Ergebnis mit seiner DNA übereinstimmen"
-Gericht: $P(T|D)$ // Wie wahrscheinlich ist die Übereinstimmung, wenn der Test Ja sagt.
-Firma: $P(D|T)$  // testet, ob DNA-Test bei Übereinstimmung Ja sagt.
+\begin{description}
+\item[Anklage] $P(D|T) \mbox{gross, also ist der Angeklagte der Täter}$
+\item[Gericht] $P(T|D) = \mbox{Zuverlässigkeit des Tests}$
+\item[Firma] $P(D|T) = \mbox{Testet, ob DNA-Test bei Übereinstimmung Ja sagt}$
+\end{description}
 
-Wir wollen eine Schlussumkehr. --> Frage: Wie kommt man von dem, was die Firma gemessen hat, zu dem Umgekehrten, wie kommt man von $P(D|T)$ zu $P(T|D)$?
+Wir wollen eine Schlussumkehr: Wie kommt man von $P(D|T)$ zu $P(T|D)$?
 
-$P(A \cap B)$ = $P(B|A)$*$P(A)$ = $P(A|B)$*$P(B)$
+$$P(A \cap B) = P(B|A) \cdot P(A) = P(A|B) \cdot P(B)$$
 
 Schlussfolgerung:
-$P(A|B)$ = $P(B|A)$ * \frac{$P(A)$}{$P(B)$}
-$P(B|A)$ = $P(A|B)$ * \frac{$P(B)$}{$P(A)$}
+$$P(A|B) &= P(B|A) \cdot \frac{P(A)}{P(B)}\quad \mbox{und} \quad P(B|A) &= P(A|B) \cdot \frac{P(B)}{P(A)}$$
 
-= Satz von Bayes
+Dies ist der \emph{Satz von Bayes}.
 
-Im Gerichtssaal: $P(T|D)$ = $P(D|T)$ * \frac{$P(T)$}{$P(D)$}
-Für ein wasserdichtes Alibi gilt: $P(T)$ = 0 --> $P(T|D)$ = 0 // Wasserdichtes Alibi schlägt DNA-Test
+Im Gerichtssaal: $P(D|T) = P(T|D) \cdot \frac{P(D)}{P(T)}$
 
-Je grösser $P(D)$ (die Übereinstimmung von Samples bei Tests, z.B. bei Blutgruppen-Test), desto kleiner $P(T|D)$, also die Wahrscheinlichkeit, dass man von diesem Test auf den Täter schliessen kann.
+Für ein wasserdichtes Alibi gilt: $P(D) = 0 \rightarrow P(D|T) = 0$ (Wasserdichtes Alibi schlägt DNA-Test).
 
+Je grösser $P(T)$, desto kleiner $P(D|T)$, also die Wahrscheinlichkeit, dass man von diesem Test auf den Täter schliessen kann.
 
 \subsection{HIV-Test}
-2 Ereignisse:
+Mögliche Ereignisse:
 \begin{itemize}
 \item $H$ = hat Krankheit
 \item $T$ = Test zeigt HIV an
 \end{itemize}
-«b
-$P(H)$ = 0.0001
-$P(T|H)$ = 0.999 // Wahrscheinlichkeit, dass ein Test HIV bei einer infizierten Person anzeigt
-$P(\bar{T}|\bar{H})$ = 0.9999 // Wahrscheinlichkeit, dass Test NICHT HIV anzeigt, wenn die Person NICHT infiziert ist.
 
-aber $P(H|T)$ = $P(T|H)$ * \frac{$P(H)$}{$P(T)$}
+Wir sind an $P(H|T)$ interessiert.
 
-$P(T)$ = $P(T|H)$*$P(H)$ + $P(T|\bar{H})$ * $P(\bar{H})$
-	 = 0.999 * 0.0001 + (1-0.9999) * (1-0.0001)
-	 = 0.00019989 = \approx 0.0002
+Wir wissen:
+\begin{itemize}
+\item $P(H) = 0.0001$
+\item $P(T|H) = 0.999$ Test zeigt HIV positiv bei einer infizierten Person an
+\item $P(\bar{T}|\bar{H}) = 0.9999$ Test zeigt HIV negativ bei einer nicht infizierten Person an
+\end{itemize}
 
-$P(H|T)$ = 0.999 * \frac{0.0001}{0.0002} \approx 0.5
-
+\begin{align*}
+P(H|T) &= P(T|H) \cdot \frac{P(H)}{P(T)} \quad\mbox{aber wir haben } P(T) \mbox{ nicht} \\
+P(T) &= P(T|H) \cdot P(H) + P(T|\bar{H}) \cdot P(\bar{H}) \\
+	 &= 0.999 \cdot 0.0001 + (1-0.9999) \cdot (1-0.0001) \\
+	 &= 0.00019989 \approx 0.0002 \\
+\Rightarrow P(H|T) &= 0.999 \cdot \frac{0.0001}{0.0002} \approx 0.5
+\end{align*}
 
 Umgekehrt:
-$P(\bar{H}|\bar{T})$ = $P(\bar{T}|\bar{H})$*\frac{$P(\bar{H})$}{$P(\bar{T})$}
- = 0.9999 * \frac{0.9999}{0.9998} \approx 1
+$$P(\bar{H}|\bar{T}) = P(\bar{T}|\bar{H}) \cdot \frac{P(\bar{H})}{P(\bar{T})}
+ = 0.9999 \cdot \frac{0.9999}{0.9998} \approx 1$$
 
 \subsection{Karies bei Kindern + Schokoladenkonsum}
 %Prüfungsaufgabe
@@ -157,16 +161,16 @@ $S$ = {Schoggikonsum}
 
 Wir wissen:
 \begin{itemize}
-\item $P(Z)$ = 0.06
-\item $P(S|Z)$ = \frac{2}{3}
-\item $P(S|\bar{Z})$ = 0.17
+\item $P(Z) = 0.06$
+\item $P(S|Z) = \frac{2}{3}$
+\item $P(S|\bar{Z}) = 0.17$
 \end{itemize}
 
-Gesucht: $P(Z|S)$ = $P(S|Z)$ * \frac{$P(Z)$}{$P(S)$}
-Noch unbekannt: $P(S)$ --> Totale Wahrscheinlichkeit $P(S|Z)$ * $P(Z)$ + $P(S|\bar{Z})$ * $P(\bar{Z})$
- = \frac{2}{3} * 0.06 + 0.17 (1-0.06) = 0.1998 \approx 20\%
+Gesucht: $P(Z|S) = P(S|Z) \cdot \frac{P(Z)}{P(S)}$
+Noch unbekannt: $P(S)$ Totale Wahrscheinlichkeit $= P(S|Z) \cdot P(Z) + P(S|\bar{Z}) \cdot P(\bar{Z})
+ = \frac{2}{3} \cdot 0.06 + 0.17 (1-0.06) = 0.1998 \approx 20\%$
 
- $P(Z|S)$ = \frac{2}{3} * \frac{0.06}{0.2} = 20\%
+ $P(Z|S) = \frac{2}{3} \cdot \frac{0.06}{0.2} = 20\%$
 
 
 \subsection{Ziegen und Autos}
@@ -176,16 +180,16 @@ Noch unbekannt: $P(S)$ --> Totale Wahrscheinlichkeit $P(S|Z)$ * $P(Z)$ + $P(S|\b
 
 Ereignisse:
 \begin{itemize}
-\item $G$ = {Auto gewonnen}
-\item $A$ = {erste Wahl war ein Auto} = \bar{Z}
-\item $Z$ = {erste Wahl war eine Ziege}
+\item $G = \mbox{Auto gewonnen}$
+\item $A = \mbox{erste Wahl war ein Auto} = \bar{Z}$
+\item $Z = \mbox{erste Wahl war eine Ziege}$
 \end{itemize}
 
 Finde Gewinnwahrscheinlichkeit
-$P(G)$ = P(G|A) * P(A) + P(G|Z) * P(Z)
+$P(G) = P(G|A) \cdot P(A) + P(G|Z) \cdot P(Z)$
 
-Strategie \"Bleiben\": 1 * \frac{1}{3} + 0 * \frac{2}{3} = \frac{1}{3}
-Strategie \"Wechseln\": 0 * \frac{1}{3} + 1 * \frac{2}{3} = \frac{2}{3}
+Strategie ``Bleiben'': $1 \cdot \frac{1}{3} + 0 \cdot \frac{2}{3} = \frac{1}{3}$
+Strategie ``Wechseln'': $0 \cdot \frac{1}{3} + 1 \cdot \frac{2}{3} = \frac{2}{3}$
 
 --> \"Wechseln\" ist doppelt so gut wie \"Bleiben\".
 
@@ -193,8 +197,8 @@ Strategie \"Wechseln\": 0 * \frac{1}{3} + 1 * \frac{2}{3} = \frac{2}{3}
 $B$: Bleibstrategie wurde gewählt
 $W$: Wechselstrategie wurde gewählt
 
-$P(G)$ = $P(G|B)$*$P(B)$ + $P(G|W)$*$P(W)$
-	= \frac{1}{3}*\frac{1}{2} + \frac{2}{3}*\frac{1}{2} = \frac{1}{2}
+$P(G) = P(G|B) \cdot P(B) + P(G|W) \cdot P(W)
+	= \frac{1}{3}\cdot\frac{1}{2} + \frac{2}{3}\cdot\frac{1}{2} = \frac{1}{2}$
 
 Optimale Strategie: Immer wechseln.
 
