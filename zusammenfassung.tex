@@ -208,4 +208,95 @@ P(G) & = P(G|B) \cdot P(B) + P(G|W) \cdot P(W) \\
 \end{align*}
 Optimale Strategie: Immer wechseln.
 
+\subsection{Das Erfolgsgeheimnis von Google}
+Problem: Vorkommen von Wörtern sagt nichts (mehr) über Relevanz aus.
+Gesucht: zusätzliche Information
+Idee von Google: Relevanz aus dem Internet --> Pagerank. Finde die Seite mit der höchsten Wahrscheinlichkeit, dass der Benutzer sie sehen möchte, aus der Linkstruktur.
+
+Beispiel-Internet:
+%images/example_internet.png
+
+Ereignisse:
+\begin{itemize}
+\item S_{i} = {Surfer liest Seite i}
+\item S_{j}' = {nach Klick liest Super-Seite j}
+\item \sum\limits{i=1}^N P(S_{i}) = 1
+\end{itemize}
+je grösser P(S_{i}), desto beliebter Seite i.
+
+Berechnung der P(S_{i})?
+
+Bedingte Wahrscheinlichkeit: P(S_{i}|S_{j}')
+
+H = 
+\begin{tabular}{ l l l l l l l l l }
+  S_{1} & S_{2} & S_{3} & S_{4} & S_{5} & S_{6} & S_{7} & S_{8} & S_{9} &  \\
+  0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{3} & 0 & S_{1}' \\
+  \frac{1}{2} & 0 & \frac{1}{2} & \frac{1}{3} & 0 & 0 & 0 & 0 & S_{2}' \\
+  \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & S_{3}' \\
+  0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & S_{4}' \\
+  0 & 0 & \frac{1}{2} & \frac{1}{3} & 0 & 0 & \frac{1}{3} & 0 & S_{5}' \\
+  0 & 0 & 0 & \frac{1}{3} & \frac{1}{2} & 0 & 0 & \frac{1}{2} & S_{6}' \\
+  0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2} & S_{7}' \\
+  0 & 0 & 0 & 0 & 0 & 1 & \frac{1}{3} & 0 & S_{8}' \\
+\end{tabular}
+
+P(S_{j}') = \sum\limits{i=1}^N P(S_{j}'|S_{i}) * P(S_{i})
+
+P(S_{j}'|S_{i}) = Zeile von H
+
+\begin{pmatrix}
+.. \\
+.. \\
+P(S_{j}') \\
+.. \\
+.. \\
+\end{pmatrix} = H \begin{pmatrix}
+.. \\
+.. \\
+P(S_{i}) \\
+.. \\
+.. \\
+\end{pmatrix}
+
+Mit der Zeit stabilisiert sich \begin{pmatrix}
+.. \\
+.. \\
+P(S_{i}) \\
+.. \\
+.. \\
+\end{pmatrix}, d.h. \begin{pmatrix}
+.. \\
+.. \\
+P(S_{j}') \\
+.. \\
+.. \\
+\end{pmatrix} = \begin{pmatrix}
+.. \\
+.. \\
+P(S_{i}) \\
+.. \\
+.. \\
+\end{pmatrix} = p --> Hp = p
+p ist Eigenvektor zum Eigenwert 1 von H
+
+\subsubsection{Berechnung des Eigenwertes}
+\"Satz\": jeder anders EW von H ist <1 %"jeder anders" stand auf der Tafel, so eine Sauklaue. Meaning? IDK! 
+
+V = a_{p}*p + a_{1}*v_{1} + a_{2}*v_{2} + ...		// v_{i} = Eigenvektor
+
+\subsubsection{Freier Wille}
+F: Surger setzt freien Wille ein
+
+P(S_{j}') = P(S_{j}'|F)*P(F) + P(S_{j}'|\overline{F})*P(\overline{F})
+
+P(F) = 1-\alpha
+P(\overline{F}) = \alpha
+P(S_{j}'|\overline{F})*P(\overline{F}) = \alpha Hp
+P(S_{j}'|F)*P(F) = \frac{1}{N}*(1-\alpha)
+
+G = Google-Matrix
+A = Matrix voller Einsen (!= Einheitsmatrix)
+p =  Gp = \alpha HP + (1-\alpha)*\frac{1}{N}*A*P --> \fbox{ G = \alpha H + (1-\alpha)*\frac{1}{N}*A }
+
 \end{document}
