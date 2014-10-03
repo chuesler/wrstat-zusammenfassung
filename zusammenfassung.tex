@@ -10,6 +10,8 @@
 
 \usepackage[margin=2.5cm]{geometry}
 
+\usepackage{caption}
+
 \renewcommand{\arraystretch}{1.2}
 
 \title{Wahrscheinlichkeitsrechnung und Statistik}
@@ -93,7 +95,7 @@ $A \cup B$ & $ P(A\cup B) = P(A) + P(B) - P(A\cap B)$ \\
 $A \cap B$ & Wenn A und B unabhängig: $P(A)P(B)$, sonst keine Formel \\
 A, B unabhängig & $P(A\cap B) = P(A)P(B)$\\[2pt]
 $A\ |\ B$ & $P(A\ |\ B) = \frac{P(A\cap B)}{P(B)}$ \\[2pt]
-$A\ |\ B$ wenn $A\ |\ B_i$ vorliegen & $ P(A\ |\ B) = \sum_{i=1}^n \frac{P(A\ |\ B_i)}{P(B_i)} P(B_i) $
+$A$ wenn $A\ |\ B_i$ vorliegen & $ P(A) = \sum_{i=1}^n P(A\ |\ B_i) \cdot P(B_i) $
 \end{tabular}
 \end{center}
 
@@ -210,11 +212,12 @@ P(G) & = P(G|B) \cdot P(B) + P(G|W) \cdot P(W) \\
 Optimale Strategie: Immer wechseln.
 
 \subsection{Das Erfolgsgeheimnis von Google}
-Problem: Vorkommen von Wörtern sagt nichts (mehr) über Relevanz aus.
-Gesucht: zusätzliche Information
-Idee von Google: Relevanz aus dem Internet --> Pagerank. Finde die Seite mit der höchsten Wahrscheinlichkeit, dass der Benutzer sie sehen möchte, aus der Linkstruktur.
+\begin{description}
+\item[Problem] Vorkommen von Wörtern sagt nichts (mehr) über Relevanz aus.
+\item[Gesucht] zusätzliche Information
+\item[Idee von Google] Relevanz aus Internet $\rightarrow$ Pagerank. Finde Seite mit höchster Relevanz aus Linkstruktur.
+\end{description}
 
-Beispiel-Internet:
 \begin{figure}
     \centering
     \includegraphics[width=0.4\textwidth]{images/example_internet.png}
@@ -224,76 +227,62 @@ Beispiel-Internet:
 
 Ereignisse:
 \begin{itemize}
-\item $S_{i} = {Surfer liest Seite i}$
-\item $S_{j}' = {nach Klick liest Super-Seite j}$
-\item $\sum\limits{i=1}^N P(S_{i}) = 1$
+\item $S_{i}$ = Surfer liest Seite $i$ ($P(S_i)$ misst Beliebtheit der Seite $S_i$)
+\item $S_{j}'$ = Surfer liest Seite $j$ nachdem er geklickt hat.
 \end{itemize}
-je grösser $P(S_{i})$, desto beliebter Seite i.
 
-Berechnung der $P(S_{i})$?
+Aus dem Satz der Totalen Wahrscheinlichtkeit folgt
+$$P(S_j') = \sum_{i=1}^N P(S_j' | S_i) \cdot P(S_i)$$
 
-Bedingte Wahrscheinlichkeit: $P(S_{i}|S_{j}')$
+Da die Anzahl Besucher pro Webseite vor und nach einem Klick ungefähr gleich bleibt können wir $P(S_j') = P(S_j)$ gleichsetzen. Dies ergibt ein Gleichungssystem (eine Gleichung pro Webseite).
 
 $$H = 
 \begin{matrix}
-  S_{1} & S_{2} & S_{3} & S_{4} & S_{5} & S_{6} & S_{7} & S_{8} & S_{9} &  \\
-  0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{3} & 0 & S_{1}' \\
-  \frac{1}{2} & 0 & \frac{1}{2} & \frac{1}{3} & 0 & 0 & 0 & 0 & S_{2}' \\
-  \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & S_{3}' \\
-  0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & S_{4}' \\
-  0 & 0 & \frac{1}{2} & \frac{1}{3} & 0 & 0 & \frac{1}{3} & 0 & S_{5}' \\
-  0 & 0 & 0 & \frac{1}{3} & \frac{1}{2} & 0 & 0 & \frac{1}{2} & S_{6}' \\
-  0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2} & S_{7}' \\
-  0 & 0 & 0 & 0 & 0 & 1 & \frac{1}{3} & 0 & S_{8}' \\
+  S_1 & S_2 & S_3 & S_4 & S_5 & S_6 & S_7 & S_8 &  \\
+  0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{3} & 0 & S_1' \\
+  \frac{1}{2} & 0 & \frac{1}{2} & \frac{1}{3} & 0 & 0 & 0 & 0 & S_2' \\
+  \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & S_3' \\
+  0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & S_4' \\
+  0 & 0 & \frac{1}{2} & \frac{1}{3} & 0 & 0 & \frac{1}{3} & 0 & S_5' \\
+  0 & 0 & 0 & \frac{1}{3} & \frac{1}{2} & 0 & 0 & \frac{1}{2} & S_6' \\
+  0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2} & S_7' \\
+  0 & 0 & 0 & 0 & 0 & 1 & \frac{1}{3} & 0 & S_8' 
 \end{matrix}$$
+\captionof{figure}{Adjazenzmatrix für das Internet}
 
-$P(S_{j}') = \sum\limits{i=1}^N P(S_{j}'|S_{i}) * P(S_{i})$
+\begin{align*}
+P(S_{j}') &= \sum\limits{i=1}^N P(S_{j}'|S_{i}) \cdot P(S_{i}) \\
+P(S_{j}'|S_{i}) &= \mbox{Zeile von } H \\
+\mbox{mit } p = \begin{pmatrix}
+\dots \\
+P(S_{j}) \\
+\dots
+\end{pmatrix},\quad p' &= Hp
+\end{align*}
 
-$P(S_{j}'|S_{i}) = Zeile von H$
-
-$\begin{pmatrix}
-\dots \\
-P(S_{j}') \\
-\dots
-\end{pmatrix} = H \begin{pmatrix}
-\dots \\
-P(S_{i}) \\
-\dots
-\end{pmatrix}$
-
-Mit der Zeit stabilisiert sich $\begin{pmatrix}
-\dots \\
-P(S_{i}) \\
-\dots
-\end{pmatrix}$, d.h. $\begin{pmatrix}
-\dots \\
-P(S_{j}') \\
-\dots
-\end{pmatrix} = \begin{pmatrix}
-\dots \\
-P(S_{i}) \\
-\dots
-\end{pmatrix}$ = p --> Hp = p
-p ist Eigenvektor zum Eigenwert 1 von H
+Mit der Zeit stabilisieren sich die Wahrscheinlichkeiten $P(S_i)$ und $p$ konvergiert zum Eigenvektor mit Eigenwert 1 von $H$.
 
 \subsubsection{Berechnung des Eigenwertes}
-\"Satz\": jeder anders EW von H ist <1 %"jeder anders" stand auf der Tafel, so eine Sauklaue. Meaning? IDK! 
+$H$ ist eine sehr spezielle Matrix. Alle Spalten summieren zu $1$ auf, und alle anderen Eigenwerte sind kleiner als $1$.
 
-$V = a_{p}\cdot p + a_{1}\cdot v_{1} + a_{2}\cdot v_{2} + ...$
-$v_{i}$ = Eigenvektor
+\begin{align*}
+p &= a_pp + a_1v_1 + a_2v_2 + \dots \\
+H^np &= a_pp + a_1\lambda_1^nv_1 + a_2\lambda_2^nv_2 + \dots \\
+\Rightarrow H^np &=a_pp
+\end{align*}
+
+Da die $\lambda_i$ alle kleiner als 1 sind verschwinden diese Terme mit grösseren $n$, und übrig bleibt $p$
 
 \subsubsection{Freier Wille}
-F: Surfer setzt freien Wille ein
+F: Surfer setzt freien Wille ein. $P(F) = 1 - \alpha$ (Konfigurationsparameter).
 
-$P(S_{j}') = P(S_{j}'|F)\cdot P(F) + P(S_{j}'|\bar{F})\cdot P(\bar{F})$
+\begin{align*}
+P(S_{j}') & = P(S_{j}'|F)\cdot P(F) + P(S_{j}'|\bar{F})\cdot P(\bar{F}) \\
+\Rightarrow p & = \frac{1}{N}\cdot (1-\alpha) +  \alpha Hp
+\end{align*}
 
-$$P(F) = 1-\alpha
-P(\bar{F}) = \alpha
-P(S_{j}'|\bar{F})\cdot P(\bar{F}) = \alpha Hp
-P(S_{j}'|F)\cdot P(F) = \frac{1}{N}\cdot (1-\alpha)$$
-
-G = Google-Matrix
-A = Matrix voller Einsen (!= Einheitsmatrix)
-p = Gp = $\alpha HP + (1-\alpha)\cdot \frac{1}{N}\cdot A\cdot P$ --> \fbox{ G = $\alpha H + (1-\alpha)\cdot \frac{1}{N}\cdot A$ }
-
+G ist die Google-Matrix, A ist eine Matrix voller Einsen.
+$$
+p = Gp = \alpha Hp + (1-\alpha)\frac{1}{N}Ap \rightarrow G = \alpha H + (1-\alpha)\frac{1}{N}A $$
+$$
 \end{document}
