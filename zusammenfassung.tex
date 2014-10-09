@@ -10,8 +10,6 @@
 
 \usepackage[margin=2.5cm]{geometry}
 
-\usepackage{caption}
-
 \renewcommand{\arraystretch}{1.2}
 
 \title{Wahrscheinlichkeitsrechnung und Statistik}
@@ -220,8 +218,8 @@ Optimale Strategie: Immer wechseln.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.4\textwidth]{images/example_internet.png}
-    \caption{Example Internet with 8 nodes}
+    \includegraphics[width=0.4\textwidth]{images/google-internet.png}
+    \caption{Beispiel-Internet mit 8 Knoten}
     \label{fig:awesome_image}
 \end{figure}
 
@@ -248,7 +246,7 @@ $$H =
   0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2} & S_7' \\
   0 & 0 & 0 & 0 & 0 & 1 & \frac{1}{3} & 0 & S_8' 
 \end{matrix}$$
-\captionof{figure}{Adjazenzmatrix für das Internet}
+
 
 \begin{align*}
 P(S_{j}') &= \sum\limits{i=1}^N P(S_{j}'|S_{i}) \cdot P(S_{i}) \\
@@ -283,6 +281,66 @@ P(S_{j}') & = P(S_{j}'|F)\cdot P(F) + P(S_{j}'|\bar{F})\cdot P(\bar{F}) \\
 
 G ist die Google-Matrix, A ist eine Matrix voller Einsen.
 $$
-p = Gp = \alpha Hp + (1-\alpha)\frac{1}{N}Ap \rightarrow G = \alpha H + (1-\alpha)\frac{1}{N}A $$
+p = Gp = \alpha Hp + (1-\alpha)\frac{1}{N}Ap \rightarrow G = \alpha H + (1-\alpha)\frac{1}{N}A 
 $$
+
+
+\section{Zufallsvariablen, Erwartungswert, Varianz}
+
+\subsection{Zufallsvariablen}
+
+Ereignisse treffen ein oder nicht. Wir wollen Versuchsausgängen aber einen Wert zuweisen können.
+Beim Würfeln haben wir die unterschiedlichen Bilder auf den Würfel-Seiten als Wert interpretiert, d.h. wir haben implizit eine Funktion 
+$$X: \Omega \rightarrow \mathbb{R}\ :\ \omega \rightarrow X(\omega)$$
+
+$X$ ist eine Zufallsvariable (ZV). Diese Zufallsvariable definiert nun neue Ereignisse:
+\begin{align*}
+\{ X = x \} \quad& P(X = x) \\
+\{ X \le a \} \quad& P(X\le a) \\
+\{ X > a \} \quad& P(X > a)
+\end{align*}
+
+\subsection{Erwartungswert}
+$X$ ist ein Würfel.
+
+\begin{center}
+\begin{tabular}{c | c | c} 
+Werte & Wahrscheinlichkeit \\ \hline
+1 & $\frac{1}{6}$ & $1 \cdot \frac{1}{6}$ \\
+2 & $\frac{1}{6}$ & $2 \cdot \frac{1}{6}$ \\
+3 & $\frac{1}{6}$ & $3 \cdot \frac{1}{6}$ \\
+4 & $\frac{1}{6}$ & $4 \cdot \frac{1}{6}$ \\
+5 & $\frac{1}{6}$ & $5 \cdot \frac{1}{6}$ \\
+6 & $\frac{1}{6}$ & $6 \cdot \frac{1}{6}$ \\ \cline{3-3}
+\multicolumn{2}{c|}{} & $\frac{21}{6} = 3.5$  
+\end{tabular}
+\end{center} 
+
+$$E(X) = \sum_{\mbox{Werte}} \mbox{Wert} \cdot \mbox{Wahrscheinlichkeit} = \sum_{i=1}^n x_i \cdot P(X = x_i) $$
+
+Intuition: $E(X)$ verhält sich wie ein Integral $\int f(x) dx$.
+
+\subsection{Visualisierung}
+Die Visualisierung erfolgt als Histogramm. % TODO: histogram mit werten 1-6, alle 1/6, mit E(X) eingezeichnet
+
+\subsection{Rechenregeln für Erwartungswerte $E(\ .\ )$}
+\begin{align*}
+\mbox{Add. Linearität: } & E(X+Y) = E(X) + E(Y) \\
+\mbox{Mult. Linearität: } & E(\lambda X) = \sum_{i=1}^n \lambda x_i P(X = x_i) = \lambda \sum_{i=1}^n x_i P(X = x_i)
+\end{align*}
+
+$E(\ .\ )$ ist also eine lineare Funktion.
+
+
+
+\begin{align*} 
+\mbox{Achtung: } E(XY) &\ne E(X)E(Y)  \\
+\mbox{aber: } E(XY) = \sum_{i,j} x_iy_j &P(X=x_i \wedge Y=y_j) \\
+\mbox{(falls unabhängig)} \\
+ = \sum_{i, j} \left(x_i y_j\right)&\left(P(X=x_i) P(Y=y_j)\right) \\
+ = \sum_i\left(x_i P(X=x_i)\right) &\sum_j\left(y_j P(Y=y_j)\right) \\
+ = E(X) \qquad & \qquad E(Y)
+\end{align*}
+
+Def: $X$ und $Y$ unabhängig $\Longleftrightarrow \forall x,y: \{ X = x \}$ und $\{Y = y\} \implies E(XY) = E(X)E(Y)$
 \end{document}
