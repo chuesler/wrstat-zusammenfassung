@@ -8,6 +8,10 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 
+\usepackage{xcolor,cancel}
+
+\usepackage{wrapfig}
+
 \usepackage[margin=2.5cm]{geometry}
 
 \renewcommand{\arraystretch}{1.2}
@@ -323,24 +327,117 @@ Intuition: $E(X)$ verhält sich wie ein Integral $\int f(x) dx$.
 \subsection{Visualisierung}
 Die Visualisierung erfolgt als Histogramm. % TODO: histogram mit werten 1-6, alle 1/6, mit E(X) eingezeichnet
 
-\subsection{Rechenregeln für Erwartungswerte $E(\ .\ )$}
+\subsubsection{Rechenregeln für Erwartungswerte $E(\ .\ )$}
+
+$E(\ .\ )$ ist eine lineare Funktion.
 \begin{align*}
 \mbox{Add. Linearität: } & E(X+Y) = E(X) + E(Y) \\
-\mbox{Mult. Linearität: } & E(\lambda X) = \sum_{i=1}^n \lambda x_i P(X = x_i) = \lambda \sum_{i=1}^n x_i P(X = x_i)
+\mbox{Mult. Linearität: } & E(\lambda X) = \sum_{i=1}^n \lambda x_i P(X = x_i) = \lambda \sum_{i=1}^n x_i P(X = x_i) \\
+X \mbox{ und } Y \mbox{ unabhängig } &\Longleftrightarrow \forall x,y: \{ X = x \} \mbox{ und } \{Y = y\} \implies E(XY) = E(X)E(Y)
 \end{align*}
 
-$E(\ .\ )$ ist also eine lineare Funktion.
+\subsection{Varianz}
+Varianz ist die Abweichung nach ``links'' und ``rechts''. Intuitiv: $X - E(X)$. Aber:
+$$ E(X - E(X)) = E(X) - E(E(X)) = E(X) - E(X) = 0 $$
+Die negativen Vorzeichen stellen ein Problem dar. Da Beträge aus analytischer Sicht suboptimal sind (Nullpunkt) ist die Lösung die Quadratfunktion.
 
+\begin{align*}
+ \mbox{Varianz } var(X) &= E((X - E(X))^2)  \\
+ \mbox{Einfachere Formel: } var(X) &= E(X^2 - 2XE(X) + E(X)^2) \\
+& = E(X^2) - 2E(X)E(X) + E(X)^2 \\
+& = E(X^2) - E(X)^2
+\end{align*}
+\subsubsection{Beispiel}
+\begin{center}
+\begin{tabular}{c | c | c | c | c}
+X & P & $X^2$     & $X \cdot P(X)$ & $X^2 \cdot P(X)$ \\ \hline
+1 & $\frac{1}{6}$ & 1  & $\frac{1}{6}$ & $\frac{1}{6}$ \\
+2 & $\frac{1}{6}$ & 4  & $\frac{2}{6}$ & $\frac{4}{6}$ \\
+3 & $\frac{1}{6}$ & 9  & $\frac{3}{6}$ & $\frac{9}{6}$ \\
+4 & $\frac{1}{6}$ & 16 & $\frac{4}{6}$ & $\frac{16}{6}$ \\
+5 & $\frac{1}{6}$ & 25 & $\frac{5}{6}$ & $\frac{25}{6}$ \\
+6 & $\frac{1}{6}$ & 36 & $\frac{6}{6}$ & $\frac{36}{6}$ 
+\end{tabular}
+\end{center}
 
-
-\begin{align*} 
-\mbox{Achtung: } E(XY) &\ne E(X)E(Y) \mbox{ falls } X, Y \mbox{ abhängig} \\
-\mbox{aber: } E(XY) = \sum_{i,j} x_iy_j &P(X=x_i \wedge Y=y_j) \\
-\mbox{(falls unabhängig)} \\
- = \sum_{i, j} \left(x_i y_j\right)&\left(P(X=x_i) P(Y=y_j)\right) \\
- = \sum_i\left(x_i P(X=x_i)\right) &\sum_j\left(y_j P(Y=y_j)\right) \\
- = E(X) \qquad & \qquad E(Y)
+\begin{align*}
+E(X) &= \frac{21}{6} = \frac{7}{2}, \quad E(X^2) = \frac{91}{6} \\
+var(X) & = E(X^2) - E(X)^2 = \frac{91}{6} - \frac{49}{4} = \frac{35}{12} \\
+\sqrt{var(X)} &\approx 1.707 \\
 \end{align*}
 
-Def: $X$ und $Y$ unabhängig $\Longleftrightarrow \forall x,y: \{ X = x \}$ und $\{Y = y\} \implies E(XY) = E(X)E(Y)$
+\subsubsection{Rechenregeln für Varianz}
+\begin{align*}
+var(\lambda X) & = E((\lambda X)^2) - E(\lambda X)^2  = \lambda^2 E(X^2) - \lambda^2E(X)^2 \\
+               & = \lambda^2 var(X) \\
+var(X+Y)       & = E((X+Y)^2) - E(X+Y)^2 \\
+               & = E(X^2) + 2E(XY) + E(Y^2) - E(X^2) - 2E(X)E(Y) - E(Y^2) \\
+               & = var(X) + var(Y) + 2(E(XY) - E(X)E(Y))
+\end{align*}
+
+Der letzte Term ist die (doppelte) Kovarianz und ist 0 wenn $X$ und $Y$ unabhängig sind.
+
+\subsection{Genauigkeit des Mittelwertes}
+Ziel: Wie Wahrscheinlich sind grosse Abweichungen? $X$: Zufallsvariable, $\mu = E(X)$, $\,\varepsilon$: erwünschte Genauigkeit.
+$$ P(|X - \mu| > \,\varepsilon) $$
+
+Klar: 
+\begin{itemize}
+\item $\,\varepsilon \mbox{ klein } \Rightarrow P (|X-\mu| > \,\varepsilon) \mbox{ gross}$.
+\item $var(X) \mbox{ grösser } \Rightarrow P (|X-\mu| > \,\varepsilon) \mbox{ grösser}$.
+\end{itemize}
+
+Satz von Tschebyschef: $$P (|X-\mu| > \,\varepsilon) \le \frac{var(X)}{\,\varepsilon^2}$$
+\subsubsection{Beweis}
+\begin{align*}
+\mbox{Ereignis } A &= \{ |X-\mu| > \,\varepsilon \} \\
+\mbox{besondere ZV: } \chi_A & = \begin{cases}1 & \quad A \text{ eingetreten} \\ 0 & \quad \text{sonst}\end{cases} \\
+E(\chi_A) & = 0\cdot P(\chi_A = 0) + 1\cdot P(\chi_A = 1) = P(A) \\
+\,\varepsilon &\le |X - \mu| & \text{gilt falls } A \text{ eingetreten} \\
+\,\varepsilon \chi_A &\le |X-\mu| & \text{``immer''} \\
+\,\varepsilon^2\chi_A^\cancel{2} &\le (X-\mu)^2 & |\ E(\ .\ ) \\
+\,\varepsilon^2P(A) = \,\varepsilon^2E(\chi_A)&\le E((X-E(X))^2) = var(X) \\
+\,\varepsilon^2P(|X-\mu|>\,\varepsilon) & \le var(X)
+\end{align*}
+
+\subsubsection{Genauigkeit erhöhen}
+Viele Messungen $X_1, X_2, \dots X_n$. $ \text{Mittelwert } M_n = \frac{X_1+ X_2+ \dots + X_n}{n}$ wird \emph{genauer} mit mehr Messungen.
+
+\begin{align*}
+E(M_n) & = E\left( \frac{X_1+ X_2+ \dots + X_n}{n}\right)  \\
+& = \frac{E(X_1) + E(X_2) + \dots + E(X_n)}{n} \\
+& = E(X) \\
+var(M_n) &= var\left(\frac{X_1+ X_2+ \dots + X_n}{n}\right) \\
+&\stackrel{\text{falls }X_i\text{ unabhängig}}{=} \frac{var(X_1)+ var(X_2)+ \dots + var(X_n)}{n^2} \\ % FIXME text should be above =
+& = \frac{n\cdot var(X)}{n^2} \\
+& = \frac{var(X)}{n}
+\end{align*}
+Die Varianz wird also kleiner bei mehr \emph{unabhängigen} Messungen.
+
+$$ P(|M_n - \mu| > \,\varepsilon) \le \frac{var(M_n)}{\,\varepsilon^2} = \frac{var(X)}{n\,\varepsilon^2} $$
+Je mehr Messungen vorhanden sind, desto weniger wahrscheinlich ist eine Abweichung grösser als $\,\varepsilon$ (\emph{Gesetz der grossen Zahlen}).
+
+Falls $P(|M_n - \mu| > \,\varepsilon) \le p$ sein soll:
+\begin{align*}
+  p & \le \frac{var(X)}{n\,\varepsilon^2} \\
+  n & \le \frac{var(X)}{p\,\varepsilon^2} \\
+  \text{worst case: } n &= \frac{var(X)}{p\,\varepsilon^2} \quad {d.h.}\quad n \sim \frac{1}{\,\varepsilon^2}
+\end{align*}
+
+\subsection{Wie genau ist die Häufigkeit als Mass für die Wahrscheinlichkeit?}
+Ereignis $A$ mit Wahrscheinlichkeit $P(A)$.
+
+\begin{align*}
+  h_n = \frac{\text{Anzahl eingetreten}}{n} & & P(|h_n - P(A)| > \,\varepsilon) =\text{ ?} \\% P(A) = E(\chi_A), \chi_A = X
+h_n = \frac{X_1 + X_2 + \dots + X_n}{n} = M_n& & P(|M_n - \mu| > \,\varepsilon) \le \frac{var(\chi_A)}{n\,\varepsilon^2} 
+\end{align*}
+
+\begin{align*}
+var(\chi_A) & = E(\chi_A^{\cancel{2}}) - E(\chi_A)^2 \\
+& = P(A) - P(A)^2 \\
+& = P(A) (1 - P(A)) \\
+P(|h_n - P(A)| > \,\varepsilon) & \le \frac{P(A)(1-P(A))}{n\,\varepsilon^2} \le \frac{1}{4n\,\varepsilon^2} \qquad(\text{da } x(1-x) \le \frac{1}{4})
+\end{align*}
+
+
 \end{document}
