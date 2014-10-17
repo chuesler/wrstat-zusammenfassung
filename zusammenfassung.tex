@@ -17,7 +17,7 @@
 \renewcommand{\arraystretch}{1.2}
 
 \newif\ifincludeExamples
-\includeExamplestrue % comment out to disable examples
+%\includeExamplestrue % comment out to disable examples
 
 \title{Wahrscheinlichkeitsrechnung und Statistik}
 \author{Christoph H\"usler $\langle$chuesler@hsr.ch$\rangle$ } 
@@ -459,7 +459,7 @@ P(|h_n - P(A)| > \,\varepsilon) & \le \frac{P(A)(1-P(A))}{n\,\varepsilon^2} \le 
 \end{align*}
 
 \subsection{Anwendung: Lineare Regression}
-Zwei Zufallsvariablen $X$, $Y$, mit $Y\approx aX+b$. Das Ziel ist, aus Messungen $a$ und $b$ zu ermitteln.
+Zwei Zufallsvariablen $X$, $Y$, mit $Y\approx aX+b$. Das Ziel ist, für Messungen $x_i, y_i$ bestmögliche $a$ und $b$ zu ermitteln.
 
 \ifincludeExamples
 \paragraph{Beispiel: Wie lange muss ein Verzögerungselement sein?}
@@ -482,12 +482,11 @@ Zwei Zufallsvariablen $X$, $Y$, mit $Y\approx aX+b$. Das Ziel ist, aus Messungen
 Gesucht ist nun $L = aT + b + Fehler$ mit möglichst kleinem Fehler.
 \fi
 
-\paragraph{Problem}
-X, Y sind Zufallsvariablen, finde $a$, $b$ so, dass $Y-aX-b$ minimal.
+\paragraph{Problem} Finde $a$, $b$ so, dass $Y-aX-b$ minimal.
 \paragraph{Gesucht}
 \begin{enumerate}
-\item Im Mittel kein Fehler: $0 = E(Y - aX-b) = E(Y) - aE(X) - b$
-\item Möglichst kleine Varianz: $var(Y-aX-b)$ möglichst klein
+\item Im Mittel kein Fehler: $E(Y - aX-b) = E(Y) - aE(X) - b = 0$
+\item Möglichst kleine Varianz: $var(Y - aX - b)$ minimal
 \end{enumerate}
 
 Das ist ein Optimierungsproblem. Idee: Ableiten.
@@ -496,10 +495,93 @@ Das ist ein Optimierungsproblem. Idee: Ableiten.
   \var(Y - aX - b) &= E((Y-aX-b)^2) - E(Y-aX-b)^2 \\ 
                    &= E(Y^2) + a^2E(X^2) + \cancel{b^2} - 2aE(XY) - \cancel{2bE(Y)} + \cancel{2abE(X)} - \\
                    &  \quad \left(E(Y)^2 + a^2E(X)^2 + \cancel{b^2} - 2aE(X)E(Y) - \cancel{2bE(Y)} + \cancel{2abE(X)}\right) \\
-                   &=  \var(Y) + a^2\var(Y) - 2a\cov(X, Y) = Q\\[0.2cm]
-  \frac{\partial Q}{\partial a} &= 2a\var(Y) - 2\cov(X, Y) = 0 \\
+                   &=  \var(Y) + a^2\var(X) - 2a\cov(X, Y) = Q\\[0.2cm]
+  \frac{\partial Q}{\partial a} &= 2a\var(X) - 2\cov(X, Y) = 0 \\
                    a &= \frac{\cov(X, Y)}{\var(X)} \\
                    b &= E(Y) - aE(X)
 \end{align*}
 
+Alternativer Weg: 
+\begin{align*}
+  Q & = E(Y^2) + a^2E(X^2) + b^2 - 2aE(XY) - 2bE(Y) + 2abE(X) \\
+  \frac{\partial Q}{\partial a} &= 2aE(X^2) - 2E(XY) + 2bE(X) = 0 \\
+  \frac{\partial Q}{\partial b} &= 2b - 2E(Y) + 2aE(X) = 0 \\
+  E(X^2)a + E(X)b & = E(XY) \\
+  E(X)a + b & = E(Y)
+\end{align*}
+\begin{align*}
+  a &= \begin{array}{c}\left[\begin{array}{cc}E(XY) & E(X) \\ E(Y) & 1\end{array}\right] \\ \hline  %FIXME
+                       \left[\begin{array}{cc}E(X^2) & E(X) \\ E(X) & 1\end{array}\right]\end{array} & \text{ Kramersche Regel}\\
+  & = \frac{E(XY) - E(X)E(Y)}{E(X^2)-E(X)^2} = \frac{\cov(X, Y)}{\var(X)}
+\end{align*}
+
+Link zu Messdaten:
+
+\begin{align*}
+\text{Mittelwert: } \qquad E(X) & = \frac{1}{n}\sum_{i=1}^n x_i \\
+                              a & = \frac{\frac{1}{n}\sum_{i=1}^n x_iy_i - \frac{1}{n^2}\sum_{i=1}^n x_i\sum_{i=1}^n y_i}{\frac{1}{n}\sum_{i=1}^n x_i^2 - \left(\frac{1}{n}\sum_{i=1}^n x_i\right)^2} \\
+                              b & = E(Y) - aE(X) = \frac{1}{n}\sum_{i=1}^n x_i - a\frac{1}{n}\sum_{i=1}^n y_i
+\end{align*}
+
+Diese Formeln zeigen uns, dass es möglich ist, lineare Regression durchzuführen ohne grosse Speicher zu benötigen.
+
+\subsection{Qualitätsmass für die Approximation}
+Idee: $var(Y-aX-b)$ ``klein'' bedeutet gut, ``gross'' schlecht. Problem: Masseinheiten.
+
+\begin{align*}
+\var(Y-aX-b) & = \var(Y) + a^2\var(X) - 2a\cov(X, Y) & \text{ aber wir kennen jetzt } a\\
+             & = \var(Y) + \frac{\cov(X, Y)^2}{\var(X)^{\cancel{2}}}\cancel{\var(X)} - 2\frac{\cov(X, Y)}{\var(X)} \cov(X,Y) \\
+             & = \var(Y) - \frac{\cov(X, Y)^2}{\var(X)}\\
+             & = \var(Y) \underbrace{\left(1 - \frac{\cov(X,Y)^2}{\var(X)\var(Y)}\right)}_{\text{dimensionslos}}
+\end{align*}
+Daraus können wir ableiten:
+\begin{align*}
+\text{``gut''} & \Leftrightarrow 1 - \frac{\cov(X,Y)^2}{\var(X)\var(Y)} \text{ klein} \\
+               \Rightarrow \text{ Regressionskoeffizient } r^2 & = \frac{\cov(X,Y)^2}{\var(X)\var(Y)} \text{ nahe bei } 1 \\
+\text{``schlecht''} & \Leftrightarrow r^2 = \frac{\cov(X,Y)^2}{\var(X)\var(Y)} \text{ nahe bei } 0 \text{ (Unabhängigkeit)} \\
+r & := \frac{\cov(X,Y)}{\sqrt{\var(X)\var(Y)}}
+\end{align*}
+$r$ erlaubt uns, 3 Fälle zu unterscheiden:
+\begin{description}
+\item[$r\sim 0$] Punkte sind grösstenteils unabhängig voneinander (schlechtes Resultat)
+\item[$r\sim 1$] Punkte sind abhängig voneinander (positive Korrelation), auf einer steigenden Geraden
+\item[$r\sim -1$] Punkte sind abhängig voneinander (negative Korrelation), auf einer abfallenden Geraden
+\end{description}
+
+\section{Verteilungsfunktionen}
+Die bisherige Vorgehensweise funktioniert gut für diskrete Zufallsvariablen mit wenigen Werten, stösst jedoch auf Probleme bei unendlich vielen, oder stetig verteilten (reelle Zahlen) Werten. Ausserdem mussten wir bisher genau wissen, wie $\Omega$ aussieht.
+
+\subsection{Verteilungsfunktion}
+Gesucht ist eine Funktion, welche alle relevante Wahrscheinlichkeitsinformation codiert:
+$$X \leadsto F_X(x)$$
+
+Neue Ereignisse, die zu X gehören:
+\begin{align*}
+ \{X\le a\} &  \leadsto P(X\le a) =: F_X(a) \\
+ \{a < X \le b\} & \leadsto P(a < X \le b) 
+\end{align*}
+
+\ifincludeExamples
+\paragraph{Beispiel} $X = $ ``Würfel''
+$$ F_X(a) = \text{ Wahrscheinlichkeit, dass Augenzahl } \le a = P(x \le a) $$ % F_X(a) springt stufenweise 
+
+Von der Verteilungsfunktion zur Wahrscheinlichkeit:
+\begin{align*}
+P(X=2) & = P(1.5 < X \le 2.5) = P(X\le2.5) - P(X\le1.5) = F(2.5) - F(1.5) \\
+\text{besser } P(X=2) & = F(2) - \lim_{x\to2-} F(x)
+\end{align*}
+
+\paragraph{Beispiel: $\infty$ -Würfel}
+Zylinder mit Endposition $X$ in $[0, 2\pi]$
+\begin{align*}
+P(a<X\le b) & = \frac{b-a}{2\pi} \\
+F(a) = P(X\le a) & = P(0<X\le a) = \frac{a}{2\pi}
+\end{align*}
+\fi
+\subsection{Eigenschaften von Verteilungsfunktionen}
+\begin{align}
+0 & \le F(x) \le 1 \\
+x_1 \le x_2 & \Rightarrow F(x_1) \le F(x_2) & \text{ monoton steigend} \\
+\lim_{x\to-\infty} F(x) = 0, & \quad\lim_{x\to\infty} F(x) = 1
+\end{align}
 \end{document}
