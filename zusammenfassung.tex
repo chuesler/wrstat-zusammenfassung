@@ -17,7 +17,7 @@
 \renewcommand{\arraystretch}{1.2}
 
 \newif\ifincludeExamples
-\includeExamplestrue % comment out to disable examples
+%\includeExamplestrue % comment out to disable examples
 
 \title{Wahrscheinlichkeitsrechnung und Statistik}
 \author{Christoph H\"usler $\langle$chuesler@hsr.ch$\rangle$ } 
@@ -538,7 +538,7 @@ $r$ erlaubt uns, 3 Fälle zu unterscheiden:
 \end{description}
 
 \section{Verteilungsfunktionen}
-Die bisherige Vorgehensweise funktioniert gut für diskrete Zufallsvariablen mit wenigen Werten, stösst jedoch auf Probleme bei unendlich vielen, oder stetig verteilten (reelle Zahlen) Werten. Ausserdem mussten wir bisher genau wissen, wie $\Omega$ aussieht.
+Die bisherige Vorgehensweise funktioniert gut für diskrete Zufallsvariablen mit wenigen Werten, stösst jedoch auf Probleme bei unendlich vielen, oder stetig verteilten (reelle Zahlen) Werten. Ausserdem mussten wir bisher genau wissen, wie $\Omega$ aussieht (dies erlaubte auch das Rechnen mit abhängigen Variablen).
 
 \subsection{Definition}
 Gesucht ist eine Funktion, welche alle relevante Wahrscheinlichkeitsinformation codiert:
@@ -589,9 +589,10 @@ E(X) & = \sum_i x_i \cdot P(x_i < X \le x_{i+1}) \\
      & = \sum_i x_i \cdot \left(F(x_{i+1}) - F(x_i)\right) \\
      & = \sum_i x_i \cdot \left(F(x_{i+1}) - F(x_i)\right) \cdot \frac{x_{i+1} - x_i}{x_{i+1} - x_i} \\
      & = \sum_i x_i \cdot \underbrace{\frac{F(x_{i+1}) - F(x_i)}{x_{i+1} - x_i}}_{\text{mit} \Delta x \to 0 \text{: Ableitung}} x_{i+1} - x_i \\
-\rightarrow  E(X) & = \int_{-\infty}^\infty x\cdot F'_X(x) dx \\
+\rightarrow  E(X) & = \int_{-\infty}^\infty x\cdot F'_X(x) dx = \int_{-\infty}^\infty x\cdot \varphi(x) dx \\
 F_X'(x) & = \varphi_X (x)\text{ Wahrscheinlichkeit, Dichtefunktion} \\
-F_X & = \text{ Stammfunktion von } \varphi_X \cdot F_X(x) = \int_{-\infty}^x \varphi_X(\xi)d\xi
+F_X & = \text{ Stammfunktion von } \varphi_X = \int_{-\infty}^x \varphi_X(\xi)d\xi \\
+P(a<X\le b) & = F_X(b) - F_X(a) = \int_a^b \varphi_X(x) dx
 \end{align*}
 
 \ifincludeExamples
@@ -599,14 +600,14 @@ F_X & = \text{ Stammfunktion von } \varphi_X \cdot F_X(x) = \int_{-\infty}^x \va
 \begin{align*}
 E(X) & = \int_{-\infty}^\infty x\cdot F'_X(x) dx & \text{F(x) ist } 0 \text{ links und rechts von } 0/2\pi \\
      & = \int_{-0}^{2\pi} x\cdot \frac{1}{2\pi} dx \\
-     & = \left[ \frac{1}{4\pi} x^2\right]_0^{2\pi} = \frac{4\pi^2}{4\pi} = \pi
+     & = \left[ \frac{1}{4\pi} x^2\right]_0^{2\pi} = \frac{4\pi^2}{4\pi} = \pi 
 \end{align*}
 \fi
 
 \subsection{Varianz}
 \begin{align*}
 \var(X) = E(X^2) - E(X)^2 \\
-E(X^2) = \int_{-\infty}^\infty \underbrace{x^2}_{\text{Wert}} \underbrace{\varphi_X(x)}_{\text{Wahrscheinlichkeit}} dx \\
+E(X^2) = \int_{-\infty}^\infty \underbrace{x^2}_{\text{Wert}}\qquad\cdot\underbrace{\varphi_X(x)}_{\text{Wahrscheinlichkeit}} dx \\
 \end{align*}
 
 \ifincludeExamples
@@ -617,5 +618,84 @@ E(X^2) & = \int_{-\infty}^\infty x^2 \varphi_X(x) dx = \int_{-\infty}^\infty x^2
 \var(X) & = E(X^2) - E(X)^2 = \frac{4}{3}\pi^2 - \pi^2 = \frac{1}{3}\pi^2, stddev = \frac{1}{\sqrt{3}}\pi = 0.58\pi
 \end{align*}
 \fi
+
+\subsection{Eigenschaften der Dichtefunktion von $\varphi_X$ } % folgen aus Eigenschaften von F_X
+\begin{align}
+F_X \text{ monoton wachsend } &\Rightarrow \quad\varphi_X(x) = F_X'(x) \ge 0 \\
+F_X(x) \to 1 \text{ für } x\to \infty &\Rightarrow \int_{-\infty}^\infty \varphi_X(x) dx 
+  = \lim_{a\to\infty} \underbrace{\int_{-\infty}^a\varphi_X(x) dx}_{F_X(a)} = 1
+\end{align}
+
+\ifincludeExamples
+\begin{align*}
+\varphi(x) = \begin{cases}a\cos x & -\frac{\pi}{2} \le x \frac{\pi}{2} \\ 0 & \text{ sonst}\end{cases} \\
+\varphi(x) \ge 0 & \forall x\in\mathbb{R} \text{ ok} \\
+\int_{-\infty}^\infty \varphi(x) dx = \int_{-\frac{\pi}{2}}^\frac{\pi}{2} a\cos x dx = a\left[sin x\right]_{-\frac{\pi}{2}}^\frac{\pi}{2} = 2a
+\end{align*}
+Also eine gültige Dichtefunktion für $a=\frac{1}{2}$
+\begin{align*}
+F(X) = \int_{-\infty}^x \varphi(\xi)d\xi = \int_{-\frac{\pi}{2}}^x \frac{1}{2}\cos\xi d\xi = \frac{1}{2}\left(sin(x) + 1\right)
+\end{align*}
+\fi
+
+\subsection{Berechnung von Varianten} % TODO: fix title
+Algorithmus am Beispiel von $F_{X^2}$, $\varphi_{X^2}$:
+\begin{align*}
+F_{X^2} & = P(X^2 \le x) & \text{Definition verwenden}\\
+        & = P(|X| \le \sqrt{x}) & \text{Umformen auf } P(X \le \dots) \\
+        & = P(-\sqrt{x} \le X \le \sqrt{x}) \\
+        & = F_X(\sqrt{x}) - F_X(-\sqrt{x}) & \text{Definition von } F_X\text{ anwenden} \\
+\varphi_{X^2} & = \frac{d}{dX} F_{X^2}(x) = \frac{d}{dX}\left(F_X(\sqrt{x}) - F_X(-\sqrt{x}\right) \\
+        & = F'_X(\sqrt{x}) \frac{1}{2\sqrt{x}} + F'_X(-\sqrt{x}) \frac{1}{2\sqrt{x}} \\
+        & = \frac{1}{2\sqrt{x}} \left( F'_X(\sqrt{x}) + F'_X(-\sqrt{x})\right) \\
+        & = \frac{1}{2\sqrt{x}} \left(\varphi_X(\sqrt{x}) + \varphi_X(-\sqrt{x})\right) \\[1cm]
+F_{\sqrt{X}} & = P(\sqrt{X} \le x) \stackrel{X\ge0}{=} P(X \le x^2) \\
+             & = F_X(x^2) \\
+\varphi_{\sqrt{X}} & = \frac{d}{dx} F_{\sqrt{X}}(x) = \frac{d}{dx} F_X(x^2) = 2x \cdot F_X(x^2) = 2x\cdot\varphi_X(x^2)
+\end{align*}
+\begin{align*}
+F_{\lambda X}(x) & = P(\lambda X \le x) = P\left(X \le \frac{x}{\lambda}\right) & \lambda > 0 \\
+                 & = F_X\left(\frac{x}{\lambda}\right) \\
+\varphi_{\lambda X}(x) & = \frac{d}{dx}F_{\lambda X}(x) = \frac{d}{dx}F_{X}\left(\frac{x}{\lambda}\right) \\
+                       & = F'_X\left(\frac{x}{\lambda}\right) \frac{1}{\lambda} = \varphi_X\left(\frac{x}{\lambda}\right)\frac{1}{\lambda} \\
+E(\lambda X) & = \int_{-\infty}^\infty x\varphi_{\lambda X} (x)dx \\
+             & = \lambda\int_{-\infty}^\infty \underbrace{\frac{x}{\lambda}}_z \varphi_X(\underbrace{\frac{x}{\lambda}}_z) \underbrace{\frac{dx}{\lambda}}_{dz} \\
+             & = \lambda \int_{-\infty}^\infty z\varphi_X(z) dz = \lambda E(X)
+\end{align*}
+
+Annahme: $X$, $Y$ unabhängig.
+\begin{align*}
+\varphi_{X+Y}(s) \cdot \Delta s & = \text{ Wahrscheinlichkeit, dass } X+Y \text{ in einem Interval } \Delta s \text{ um } s \text{ liegt} \\
+ & = \underbrace{\text{ Wahrscheinlichkeit, dass } X \text{ in einem Interval um } x \text{ liegt }}_{\varphi_X(x) \cdot \text{ Interval}} \wedge \\& \qquad\underbrace{\text{ dass } Y \text{ in einem Interval um } s-x}_{\varphi_Y(s-x)\cdot \text{ Interval}} \underbrace{\text{ für alle } x-\text{ Intervalle liegt}}_{\rightarrow Summe} \\
+  &= \int_{-\infty}^\infty \varphi_X(x) \varphi_Y(s-x) dx \Delta s \\
+  \Rightarrow \varphi_{X+Y}(s) & = \int_{-\infty}^\infty \varphi_X(x) \varphi_Y(s-x) dx = \varphi_X *\ \varphi_Y(s) & = \text{ Faltung}
+\end{align*}
+
+\ifincludeExamples
+Beispiel mit $X$, $Y$ gleichverteilt in [0,1]:
+\begin{align*}
+\varphi_X(x) & = \begin{cases} 0 & x \le 0 \\ 1 & 0 < x \le 1 \\ 0 & x > 1\end{cases}\\
+\varphi_{Y}(s-x) & = \begin{cases}0 & s-x> 1 \Leftrightarrow x < s-1 \\ 1 & s-1\le x < s \\ 0 & x\ge s\end{cases} \\
+\varphi_{X+Y} (s) & = \int_{-\infty}^\infty \varphi_X(x)\varphi_Y(s-x) dx & \varphi_X(x) \text{ ist immer 1 im relevanten Bereich}\\
+                  & = \int_0^1 \varphi_Y(s-x) dx \\
+\varphi_{X+Y}(s) & = \begin{cases} 0 & s < 0 \\ s & 0\le s <1 \\1-(s-1) = 2-s & 1 \le s \le 2\\ 0 & s > 2 \end{cases} \\
+\end{align*}
+\fi
+
+\paragraph{Erzeugung von Zufallszahlen mit Verteilungsfunktion $F$}
+\begin{description}
+\item[Gegeben] Zufallsvariable $X$ mit Verteilungsfunktion $F$, Y = F(X), Y ist ZV mit Werten in [0, 1].
+\item[Gesucht] $F_Y$
+\end{description}
+
+\begin{align*}
+  F_Y(y) & \stackrel{\text{Def}}{=} P(Y \le y) \\
+         & = P(F(X) \le y)  & F \text{ umkehrbar da monoton wachsend} \\
+         & = P(X \le F^{-1}(y)) \\
+         & \stackrel{\text{Def}}{=} F(F^{-1}(y)) = y 
+\end{align*}
+
+$F(X)$ ist also gleichverteilt!
+Umgekehrt: $Y$ gleichverteilt $\Rightarrow F^{-1}(Y)$ hat Verteilungsfunktion $F$.
 
 \end{document}
