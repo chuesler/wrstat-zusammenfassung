@@ -24,6 +24,7 @@
 
 \DeclareMathOperator{\var}{var}
 \DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\median}{median}
 
 \begin{document}
 \maketitle
@@ -697,5 +698,48 @@ Beispiel mit $X$, $Y$ gleichverteilt in [0,1]:
 
 $F(X)$ ist also gleichverteilt!
 Umgekehrt: $Y$ gleichverteilt $\Rightarrow F^{-1}(Y)$ hat Verteilungsfunktion $F$.
+
+\section{Katalog von Wahrscheinlichkeitsverteilungen}
+\newlength{\katalogSpaltezwei}
+\setlength{\katalogSpaltezwei}{11.5cm}
+
+\subsection{Gleichverteilung in Intervall $[\,a, b\,]$}
+\begin{tabular}{r p{\katalogSpaltezwei}}
+Anwendung & Zufallszahlen \\
+Dichtefunktion & $\varphi(x) = \begin{cases}\frac{1}{b-a} & a < x < b \\ 0 & \text{sonst} \end{cases} $ \\
+Verteilungsfunktion & $F(x) = \begin{cases}0 & x < a \\ \frac{x-a}{b-a} & a < x < b \\ 1 & x > b\end{cases} $ \\
+Erwartungswert & $E(X) = \frac{a+b}{2}$ \\
+Varianz & $\var(X) = \frac{(b-a)^2}{12}$ \\
+Median & $ \median(X) = \frac{a+b}{2} $
+\end{tabular}
+
+
+\subsection{Exponentialverteilung}
+\begin{tabular}{r p{\katalogSpaltezwei}}
+Anwendung & Zeitabhängige Prozesse ohne Erinnerungsvermögen (ungesättigte Queues, 
+            Ausfall von Hardware ohne Alterungsprozess, radioaktiver Zerfall) \\
+Dichtefunktion & $\varphi(x) = \begin{cases} 0 & x < 0 \\ ae^{-ax} & x \ge 0 \end{cases} $ \\
+Verteilungsfunktion & $F(x) = \begin{cases} 0 & x<0 \\ 1 - e^{-ax} & x \ge 0 \end{cases} $ \\
+Erwartungswert & $E(X) = $ \\
+Varianz & $\var(X) = $ \\
+Median & $ \median(X) =  $ 
+\end{tabular} 
+
+\subsubsection{Herleitung}
+\begin{align*}
+\text{kein Erinnerungsvermögen}: P(X\le t) & = P(X \le t + t_0 | X > t_0) \\ 
+1 - F(t) & = P(X>t) = g(t) \\
+P(X>t) & = P(X > t+t_0 | X > t_0) & \text{mit } P(A|B) = \frac{P(A\cap B)}{P(B)}\\ 
+ & =  \frac{P(X > t+t_0 \wedge \cancel{X > t_0})}{P(X>t_0)} \\ 
+ & = \frac{P(X > t+t_0)}{P(X>t_0)} \\
+ & = \frac{g(t+t_0)}{g(t_0)} \\
+ \text{Funktionalgleichungen } g(t+t_0) & = g(t)g(t_0) & \text{``Lösung durch Anstarren'': } e^x\\
+\end{align*}
+Wir dürfen aus der Konstruktion annehmen, dass $g'$ existiert.
+\begin{align*}
+\text{Ableiten nach} t_0: g'(t+t_0) & = g(t)g't(t_0) \\
+\lim_{t_0 \to 0} g'(t) & = g(t)g'(0) & \text{DGL für } g \\
+\Rightarrow g(t) & = e^{-at} 
+\end{align*}
 
 \end{document}
