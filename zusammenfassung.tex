@@ -17,7 +17,10 @@
 \renewcommand{\arraystretch}{1.2}
 
 \newif\ifincludeExamples
-%\includeExamplestrue % comment out to disable examples
+\includeExamplestrue % comment out to disable examples
+
+\newif\ifincludeDerivations
+\includeDerivationstrue % comment out to disable derivations
 
 \title{Wahrscheinlichkeitsrechnung und Statistik}
 \author{Christoph H\"usler $\langle$chuesler@hsr.ch$\rangle$ } 
@@ -350,10 +353,10 @@ $$ E(X - E(X)) = E(X) - E(E(X)) = E(X) - E(X) = 0 $$
 Die negativen Vorzeichen stellen ein Problem dar. Da Beträge aus analytischer Sicht suboptimal sind (Nullpunkt) ist die Lösung die Quadratfunktion.
 
 \begin{align*}
- \text{Varianz } \var(X) &= E((X - E(X))^2)  \\
+ \text{Varianz } \var(X) &= E((X - E(X))^2) \\
  \text{Einfachere Formel: } \var(X) &= E(X^2 - 2XE(X) + E(X)^2) \\
-& = E(X^2) - 2E(X)E(X) + E(X)^2 \\
-& = E(X^2) - E(X)^2
+  & = E(X^2) - 2E(X)E(X) + E(X)^2 \\
+  & = E(X^2) - E(X)^2
 \end{align*}
 
 \ifincludeExamples
@@ -479,14 +482,17 @@ Gesucht ist nun $L = aT + b + Fehler$ mit möglichst kleinem Fehler.
 \item Möglichst kleine Varianz: $var(Y - aX - b)$ minimal
 \end{enumerate}
 
+\ifincludeDerivations
 Das ist ein Optimierungsproblem. Idee: Ableiten.
-
 \begin{align*}
   \var(Y - aX - b) &= E((Y-aX-b)^2) - E(Y-aX-b)^2 \\ 
                    &= E(Y^2) + a^2E(X^2) + \cancel{b^2} - 2aE(XY) - \cancel{2bE(Y)} + \cancel{2abE(X)} - \\
                    &  \quad \left(E(Y)^2 + a^2E(X)^2 + \cancel{b^2} - 2aE(X)E(Y) - \cancel{2bE(Y)} + \cancel{2abE(X)}\right) \\
                    &=  \var(Y) + a^2\var(X) - 2a\cov(X, Y) = Q\\[0.2cm]
-  \frac{\partial Q}{\partial a} &= 2a\var(X) - 2\cov(X, Y) = 0 \\
+  \frac{\partial Q}{\partial a} &= 2a\var(X) - 2\cov(X, Y) = 0
+\end{align*}
+\fi
+\begin{align*}
                    a &= \frac{\cov(X, Y)}{\var(X)} \\
                    b &= E(Y) - aE(X)
 \end{align*}
@@ -713,18 +719,20 @@ Varianz & $\var(X) = \frac{(b-a)^2}{12}$ \\
 Median & $ \median(X) = \frac{a+b}{2} $
 \end{tabular}
 
-
 \subsection{Exponentialverteilung}
 \begin{tabular}{r p{\katalogSpaltezwei}}
 Anwendung & Zeitabhängige Prozesse ohne Erinnerungsvermögen (ungesättigte Queues, 
             Ausfall von Hardware ohne Alterungsprozess, radioaktiver Zerfall) \\
 Dichtefunktion & $\varphi(x) = \begin{cases} 0 & x < 0 \\ ae^{-ax} & x \ge 0 \end{cases} $ \\
 Verteilungsfunktion & $F(x) = \begin{cases} 0 & x<0 \\ 1 - e^{-ax} & x \ge 0 \end{cases} $ \\
-Erwartungswert & $E(X) = $ \\
-Varianz & $\var(X) = $ \\
-Median & $ \median(X) =  $ 
+Erwartungswert & $E(X) = \frac{1}{a} $ \\
+Varianz & $\var(X) = \frac{1}{a^2} $ \\
+Median & $ \median(X) = \frac{1}{a} \log 2 \approx \frac{1}{a} 0.693 $ 
 \end{tabular} 
 
+$\frac{1}{a}$ ist die mittlere Zeit zwischen 2 Ereignissen (z.B. MTBF bei Hardware).
+
+\ifincludeDerivations
 \subsubsection{Herleitung}
 \begin{align*}
 \text{kein Erinnerungsvermögen}: P(X\le t) & = P(X \le t + t_0 | X > t_0) \\ 
@@ -741,5 +749,90 @@ Wir dürfen aus der Konstruktion annehmen, dass $g'$ existiert.
 \lim_{t_0 \to 0} g'(t) & = g(t)g'(0) & \text{DGL für } g \\
 \Rightarrow g(t) & = e^{-at} 
 \end{align*}
+
+\begin{align*}
+E(X) & = \int_{-\infty}^\infty t\,\varphi(t)\,dt = \int_0^\infty t\,ae^{-at}\,dt & \rightarrow \text{ Partielle Integration} \\
+     & = \underbrace{\left[ ta\frac{1}{-a}e^{-at}\right]_0^\infty}_{\to 0} - \int_0^\infty 1\frac{1}{-a}ae^{0at}dt \\
+     & = \int_0^\infty e^{-at} dt = \left[ \frac{1}{-a}e^{-at}\right]_0^\infty \\
+     & = 0 - \frac{1}{-a} = \frac{1}{a}
+\end{align*}
+Wahrscheinlichkeit, dass ein Ereignis früher als erwartet eintrifft:
+$$ P\left(X\le\frac{1}{a}\right) = F\left(\frac{1}{a}\right) = 1-e^{-1} = 0.6321 $$
+\begin{align*}
+E(X^2) & = \int_{-\infty}^\infty t^2\,\varphi(t)\,dt = \int_0^\infty t^2\,ae^{-at}\,dt \\
+       & = \left[t^2 a\frac{1}{-a}e^{-at}\right]_0^\infty - \int_0^\infty 2t a\frac{1}{-a}e^{-at} dt \\
+       & = \frac{2}{a}\int_0^\infty t\,e^{-at}\,dt = \frac{2}{a}\frac{1}{a} \\
+var(X) & = E(X^2) - E(X)^2 = \frac{2}{a^2} - \left(\frac{1}{a}\right)^2 = \frac{1}{a^2}
+\end{align*}
+
+Halbwertszeit = Median:
+\begin{align*}
+\median(X) & = F(t_{\frac{1}{2}}) = \frac{1}{2} \\
+1-e^{-at} & = \frac{1}{2} \\
+\log \frac{1}{2} = -at_{\frac{1}{2}} &\Rightarrow t_{\frac{1}{2}} = \frac{1}{a} \log 2 \approx \frac{1}{a} 0.693
+\end{align*}
+\fi
+\ifincludeExamples
+\paragraph{Beispiel: Raid 1 mit 2 Disks}
+Gesucht ist die Lebensdauer des Gesamtsystems.
+
+\begin{align*}
+\text{Näherung: } X_i & = \text{Lebensdauer von Disk } i \text{ exponentialverteilt, Annahme: Disks unabhängig}\\
+P(\underbrace{X_1 \le t \wedge X_2 \le t}_{\text{Ereignis Totalausfall}}) & = P(X_1 \le t)\ P(X_2 \le t) \\
+  & = (1-e^{-at})^2 = F_{\text{Totalausfall}}(t) \\
+\varphi_{\text{Totalausfall}} & = F'(t) = 2(1-e^{-at})ae^{-at} \\
+\text{Erwartete Zeit für Totalausfall: }& \int_{-\infty}^\infty t\varphi(t)dt = \int_{-\infty}^\infty t 2(1-e^{-at})ae^{-at} dt \\
+ & = 2 \underbrace{\int_{-\infty}^\infty t ae^{-at} dt}_{E(X)} - \underbrace{\int_{-\infty}^\infty t 2ae^{-2at} dt}_{\text{Exponentialverteilung mit }\tilde{a} = 2a} \\
+ & = \frac{2}{a} - \frac{1}{2a} = \frac{4}{2a} - \frac{1}{2a} = \frac{3}{2} \frac{1}{a} \quad \text{d.h. 50\% mehr ``Lebenserwartung''}
+\end{align*}
+
+\fi
+
+\subsection{Poisson-Verteilung}
+\begin{tabular}{r p{\katalogSpaltezwei}}
+Anwendung & Anzahl Fälle eines erinnerungsfreien Ereignisses, welches mit Rate $\lambda$ eintritt, 
+            Anzahl seltener Ereignisse \\
+Wahrscheinlichkeit & $P_\lambda(k) = e^{-\lambda} \frac{\lambda^k}{k!}$ \\
+Erwartungswert & $E(K) = \lambda $ \\
+Varianz & $\var(X) = \lambda $ \\
+Median & $ \median(X) =  $ 
+\end{tabular} 
+
+\ifincludeDerivations
+\paragraph{Herleitung}
+$X_1, X_2, \dots, X_n$ exponentialverteilte Zufallsvariablen, unabhängig \\
+Gesucht: 
+\begin{enumerate}
+\item Wahrscheinlichkeit für genau $k$ Fehler-Ereignisse in Intervall $x$ \\ 
+\item Erwartete Anzahl Fehler
+\end{enumerate}
+
+Dazu brauchen wir die Verteilung von $X_1 + X_2 + \dots + X_k$
+
+\begin{align*}
+\varphi_{X_1+X_2} & = \varphi_{X_1} * \varphi_{X_2} (x) = \int_{-\infty}^\infty \varphi_{X_1}(\xi) \varphi_{X_2}(x-\xi) d\xi \\ 
+\varphi_k & \text{ ist Dichtefunktion von }X_1 + \dots + X_k \\
+\varphi_2(x) & = \int_{-\infty}^\infty \varphi_1(\xi) \varphi_1(x-\xi) d\xi \\
+& = \int_0^x ae^{-a\xi} ae^{-a(x-\xi)} d\xi \\
+& = \int_0^x \underbrace{a^2e^{-ax}}_{\text{unabhängig von }\xi}\underbrace{e^{-a(\xi-\xi)}}_{1}d\xi \\
+& = a^2e^{-ax} \int_0^x d\xi = a^2xe^{-ax} \\
+\varphi_k(x) & = a^kx^{k-1}e^{-ax} \frac{1}{(k-1)!} & \text{ dies sind die Erlang-Verteilungen} 
+\end{align*}
+
+Wahrscheinlichkeit für genau $k$ Fehler in Zeitinterval $x$:
+\begin{align*}
+P(\text{genau }k) & = P(\text{mindestens } k) - P(\text{mehr als } k) \\
+& = P(X_1 + \dots + X_k \le x) - P(X_1 + \dots + X_k + X_{k+1} \le x) \\
+& = F_k(x) - F_{k+1}(x) \\
+F_k(x) = 1 - e^{-ax}\sum_{i=0}^{k-1} \frac{(ax)^k}{i!} \\
+\Rightarrow P(\text{genau k}) &= 1 - e^{-ax} \sum_{i=0}^{k-1} \frac{(ax)^k}{i!} - 
+  \left(1 - e^{-ax} \sum_{i=0}^{k} \frac{(ax)^k}{i!}\right) \\
+  & = e^{-ax}\frac{(ax)^k}{k!}
+\end{align*}
+Wichtig ist nur $ax = \lambda$.
+\begin{align*}
+   P(\text{genau }k) = P_{\lambda(k)} = e^{-\lambda} \frac{\lambda^k}{k!} \quad\text{Poisson-Verteilung} 
+\end{align*}
+\fi
 
 \end{document}
