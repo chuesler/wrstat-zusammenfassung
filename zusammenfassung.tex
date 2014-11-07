@@ -799,7 +799,7 @@ Median & $ \median(X) =  $
 \end{tabular} 
 
 \ifincludeDerivations
-\paragraph{Herleitung}
+\subsubsection{Herleitung}
 $X_1, X_2, \dots, X_n$ exponentialverteilte Zufallsvariablen, unabhängig \\
 Gesucht: 
 \begin{enumerate}
@@ -834,5 +834,127 @@ Wichtig ist nur $ax = \lambda$.
    P(\text{genau }k) = P_{\lambda(k)} = e^{-\lambda} \frac{\lambda^k}{k!} \quad\text{Poisson-Verteilung} 
 \end{align*}
 \fi
+
+\subsection{Binomialverteilung}
+Ein Bernoulli-Experiment ist ein Experiment mit genau 2 möglichen Resultaten.
+
+\begin{tabular}{r p{\katalogSpaltezwei}}
+Anwendung & Wiederholte Bernoulli-Experimente \\
+Wahrscheinlichkeit & $P(X=k) = \binom{n}{k} p^k(1-p)^{n-k}$ - schwierig zu berechnen für grosse $n$\\
+Erwartungswert & $ E(X) = np $ \\
+Varianz & $\var(X) = np\,(1-p) $ \\
+Verteilungsfunktion & $F(x) = \sum_{k=0}^{k \le x} \binom{n}{k} p^k(1-p)^{n-k}$ (es gibt keine schöne Formel)
+\end{tabular} 
+
+\subsubsection{Herleitung: Welche Verteilung hat die Zufallsvariable ``Anzahl Kreuze in einem Feld''?}
+
+Das Feld hat eine Grösse von 6x6, mehrere Kreuze pro Feld sind erlaubt. Es sind 18 Kreuze zu setzen. 
+
+Aus Sicht eines einzelnen Feldchens ist das Experiment sehr einfach: Wiederhole 18 mal das Experiment ``Kreuz mit Wahrscheinlichkeit $\frac{1}{36}$''.
+
+Allgemein: $n$ Wiederholungen eines Bernoulli-Experiments mit Wahrscheinlichkeit $p$. Gezählt wird die Anzahl positiver Ausgänge $X$.
+
+\begin{align*}
+\text{Rechenregeln: } X_1, \dots, X_n  &\text{ unabhängige ZV der Art } \chi_A, P(A)= p \\
+E(X) & = \underbrace{E(X_1)}_{p} + \dots + \underbrace{E(X_n)}_{p} = np \\
+\var(X) & = \underbrace{\var(X_1)}_{p\,(1-p)} + \dots + \underbrace{\var(X_n)}_{p\,(1-p)} = np\,(1-p) \\
+\text{Wahrscheinlichkeit für } &k \text{ Kreuze: } P(X = k) \\
+\text{Es gibt } \binom{n}{k} &\text{ Möglichkeiten für } k \text{ positive Ausgänge} \\ 
+p^k(1-p)^{n-k} &\text{ ist die Wahrscheinlichkeit für eine bestimmte Abfolge von Ausgängen} \\
+\Rightarrow P(X=k) &= \binom{n}{k} p^k(1-p)^{n-k} \text{ - dies ist die Binomialverteilung.}
+\end{align*}
+
+\ifincludeDerivations
+\paragraph{Berechnung des Erwartungswertes aus $P(X=k)$} 
+
+\begin{align*}
+E(X) &= \sum_{k=0}^{n} k \binom{n}{k} p^k(1-p)^{n-k} \\
+     &= \sum_{k=1}^{n} \binom{n}{k} k p^{k-1}p (1-p)^{n-k} & x = p, y = p-1 \\
+     &= \sum_{k=1}^{n} p \binom{n}{k} \underbrace{k x^{k-1}}_{\frac{d}{dx} x^k} y^{n-k} \\
+     & = p \frac{d}{dx} \sum_{k=0}^{n} \binom{n}{k}x^k y^{n-k} \\
+     & = p \frac{d}{dx} (x+y)^n \\
+     & = p n (x+y)^{n-1} = pn(p + 1-p)^{n-1} \\
+     & = np
+\end{align*}
+\fi
+
+\subsubsection{Berechnung für grosse $n$}
+Die direkte Berechnung ist schwirig für grosse $n$. Lösungsansätze:
+
+\paragraph{Seltene Ereignisse} ``selten'' = $n$ gross, $p$ klein.
+
+Vermutung: Anzahl seltener Ereignisse ist Poisson-verteilt.
+Beweis:
+\begin{align*}
+E(X) &= np = \lambda \\
+\underbrace{P(X=k)}_{\text{Binomialverteilt}} & \stackrel{?}{\longrightarrow} P_\lambda(k) 
+         = \frac{\lambda^k}{k!} e^{-k} \text{ für } n \to\infty \\
+\binom{n}{k} p^k (1-p)^{n-k} &= \binom{n}{k} \left(\frac{\lambda}{n}\right)^k \left(1-\frac{\lambda}{n}\right)^{n-k} \\
+    &= \frac{n(n-1)\cdots(n-k+1)}{1\cdot2\cdots k} \left(\frac{\lambda}{n}\right)^k 
+            \left(1-\frac{\lambda}{n}\right)^n \left(1-\frac{\lambda}{n}\right)^{-k} \\
+    & = \frac{\lambda^k}{k!} \underbrace{\left(1-\frac{\lambda}{n}\right)^n}_{\to e^{-\lambda}} 
+             \underbrace{\left(1-\frac{\lambda}{n}\right)^{-k}}_{\to 1}
+             \underbrace{\frac{n}{n}}_{\to 1} \underbrace{\frac{n-1}{n}}_{\to 1} \underbrace{\frac{n-2}{n}}_{\to 1} \cdots 
+             \underbrace{\frac{n-k}{n}}_{\to 1} & \text{ mit } n\to\infty \\
+    &  \to \frac{\lambda^k}{k!}e^{-\lambda} \quad \text{ für } n\to\infty
+\end{align*}
+
+\paragraph{Nicht-seltene Ereignisse ($p \approx \frac{1}{2}$)}
+In diesen Fällen ist die Normalverteilung anwendbar.
+
+\subsection{Normalverteilung, Gauss-Verteilung}
+\begin{tabular}{r p{\katalogSpaltezwei}}
+Anwendung & ``Summe vieler kleiner Zufallsbeiträge'', Messfehler, Brownsche Bewegung, (weisses) Rauschen \\
+Dichtefunktion & $\varphi(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$ \\
+Erwartungswert & $ E(X) = \mu $ \\
+Varianz & $\var(X) = \sigma^2 $
+\end{tabular} 
+
+\paragraph{Verteilungsfunktion}
+\begin{align*}
+F(X) = \frac{1}{\sqrt{2\pi}\sigma} \int_{-\infty}^x e^{-\frac{(\xi-\mu)^2}{2\sigma^2}} d\xi = \text{ keine ``geschlossene'' Stammfunktion}
+\end{align*}
+
+Berechnung:
+\begin{itemize}
+\item erfinde neue Funktion: $erf(x) = \frac{2}{\pi} \int_0^x e^{-t^2}dt \Rightarrow F(x) 
+         = \frac{1}{2}\left(1 + erf\left(\frac{x}{\sqrt{2}}\right)\right)$ ($\mu = 0, \sigma = 1$)
+\item Tabelle
+\end{itemize}
+
+Die Tabelle hat ein Problem: Sie gilt nur für ein bestimmtes $\mu$ und $\sigma$.
+Lösung: Standardisierung durch $$Z = \frac{X - \mu}{\sigma}, \mu = E(X), \sigma^2 = \var(X) \Longrightarrow E(Z) = 0, \var(Z) = 1$$ 
+
+\subsubsection{Berechnung von $E(X), \varphi(X), \varphi_1 * \varphi_2 = \varphi_3$}
+\paragraph{Warum $\frac{1}{\sqrt{2\pi}}$?}
+\begin{align*}
+I & = \int_{-\infty}^\infty e^{-\frac{x^2}{2}} dx = \ ? \\
+I^2 & = \int_{-\infty}^\infty e^{-\frac{x^2}{2}} dx \int_{-\infty}^\infty e^{-\frac{y^2}{2}} dy \\
+    & = \int \int e^{-\frac{x^2 + y^2}{2}} dx dy = \text{ Volumen unter der Fläche } z = e^{-\frac{x+y}{2}}
+\end{align*}
+Wechsel zu Polarkoordinaten $r, \varphi$:
+\begin{align*}
+z & = e^{-\frac{r^2}{2}} \\
+I^2 & = \int_0^\infty \int_0^{2\pi} e^{-\frac{r^2}{2}} \underbrace{r\ d\varphi\ dr}_{\text{Grundfläche einer Säule}} \\
+    & = 2\pi \int_0^\infty re^{-\frac{r^2}{2}} dr \\
+    & = 2\pi \left[ -e^{-\frac{r^2}{2}} \right]_0^\infty = 2\pi (0 - (-1)) = 2\pi \\
+\Rightarrow I &= \sqrt{2\pi}
+\end{align*}
+
+\paragraph{$E(X)$}
+\begin{align*}
+  E(X) & = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^\infty xe^{-\frac{x^2}{2}} dx \\
+       & = \frac{1}{\sqrt{2\pi}} \left[ -e^{-\frac{x^2}{2}} \right]_{-\infty}^\infty \\
+       & = \frac{1}{\sqrt{2\pi}} (0-0) = 0
+\end{align*}
+
+\paragraph{$\var(X)$}
+\begin{align*}
+  \var(X) & = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^\infty x^2e^{-\frac{x^2}{2}} dx \\
+          & = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^\infty x\cdot xe^{-\frac{x^2}{2}} dx \\
+          & = \underbrace{\frac{1}{\sqrt{2\pi}} \left[ x(-e^{-\frac{x^2}{2}} \right]_{-\infty}^\infty}_{0} + 
+              \underbrace{\frac{1}{\sqrt{2\pi}} \int_{-\infty}^\infty 1 e^{-\frac{x^2}{2}} dx}_{1} \\
+          & = 1
+\end{align*}
 
 \end{document}
