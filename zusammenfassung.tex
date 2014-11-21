@@ -1165,4 +1165,100 @@ Potenzverteilung mit $\alpha < 3$ hat keine Varianz!
 \end{align*}
 Der Median funktioniert also für all $\alpha>1$.
 \fi
+
+\subsection{80/20-Regeln}
+Voraussetzung: Wir haben eine Potenzverteilung mit Exponent $\alpha$.
+
+Beispiel: Einkommensverteilung, $\alpha$ ist der Gini-Koeffizient.
+
+\begin{center}
+\begin{tabular}{rl}
+    20: \qquad & 20\% Topverdiener \\
+    80: \qquad & Anteil dieser Topverdiener am Gesamteinkommen \\
+\end{tabular}
+\end{center}
+
+\begin{align*}
+    \text{20\%:} \qquad &x \text{ Einkommensgrenze: } \\
+    \underbrace{P(X>x)}_{=1-F_X(x)} &= 20\% = \int_x^\infty \varphi(\xi)d\xi
+        = \int_x^\infty C_\alpha \xi^{-\alpha}d\xi \\
+    &= \left[ C_\alpha \frac{1}{\alpha-1} \xi^{1-\alpha} \right]_x^\infty = \frac{\alpha-1}{x_{min}^{1-\alpha}} \frac{1}{\alpha-1}x^{1-\alpha} 
+        = \left(\frac{x}{x_{min}}\right)^{1-\alpha} = P(x) \\
+    \text{80\%: } \qquad &W(x) \text{ Vermögen:} \\
+    W(x) &= \frac{\int_x^\infty \xi\varphi(\xi)d\xi}{\int_{x_{min}}^\infty \xi\varphi(\xi)d\xi} =
+        \frac{\int_x^\infty \xi C_\alpha\xi^{-\alpha}d\xi}{\frac{\alpha-1}{\alpha-2} x_{min}} = 
+        \frac{\left[C_\alpha \frac{1}{2-\alpha} \xi^{2-\alpha}\right]_x^\infty}{\frac{\alpha-1}{\alpha-2} x_{min}} \\
+        & = \frac{-\frac{\cancel{\alpha-1}}{x_{min}^{1-\alpha}} \frac{1}{\cancel{2-\alpha}} x^{2-\alpha} }{\frac{\cancel{\alpha-1}}{\cancel{\alpha-2}} x_{min}} 
+        = \left(\frac{x}{x_{min}}\right)^{2-\alpha}
+\end{align*}
+
+Abhängigkeit: $$P(x), W(x) \longrightarrow W(x) = \left(\frac{x}{x_{min}}\right)^{2-\alpha} 
+    = \left(P(x)^{\frac{1}{1-\alpha}}\right)^{2-\alpha} = P(x)^{\frac{2-\alpha}{1-\alpha}} $$
+
+Das Verhältnis $80/20$ gehört offensichtlicherweise zu einem bestimmten $\alpha$. 
+\begin{align*}
+    0.8 &= 0.2^{\frac{2-\alpha}{1-\alpha}} \\
+    \log 0.8 &= \frac{2-\alpha}{1-\alpha} \log 0.2 \\
+    \lambda = \frac{\log 0.8}{\log 0.2} &= \frac{2-\alpha}{1-\alpha} \\
+    &\Rightarrow \lambda - \lambda\alpha = 2-\alpha \Rightarrow \alpha(1-\lambda) = 2-\lambda \\
+    \alpha &= \frac{2-\lambda}{1-\lambda} = 2.161
+\end{align*}
+
+Was bedeutet $\alpha$?
+\begin{center}
+\begin{tabular}{rl}
+    $\alpha$ klein ($\alpha >2$) & $\frac{2-\alpha}{1-\alpha}$ klein $\rightarrow$ ``Kapitalismus'' \\
+    $\alpha$ gross & $\frac{2-\alpha}{1-\alpha} \approx 1 \rightarrow$ ``Kommunismus''
+\end{tabular}
+\end{center}
+
+\section{Schätzen}
+Standardalgorithmus
+\begin{enumerate}
+\item Welcher Prozess/welche Verteilung liegt vor?
+\item Parameter: $\mu, \sigma^2, n, p, a, \lambda, \alpha, x_{min}$
+    \begin{itemize}
+        \item aus der Theorie
+        \item aus den Messunagen: Schätzen
+    \end{itemize}
+\item Wahrscheinlichkeiten, Kennzahlen, etc. berechnen
+\item Stimmt die Verteilung: Hypothesentest
+\end{enumerate}
+
+\subsection{Was ist ein Schätzverfahren?}
+$X$ ist eine Zufallsvariable mit bekannter Verteilung, Parameter $\vartheta$.
+
+Parameter schätzen:
+\begin{enumerate}
+\item $X$ wiederholen $X_1, X_2, \dots, X_n$
+\item Schätzformel: $\hat{\vartheta}(X_1, X_2, \dots, X_n)$ (auch ``Schätzer'')
+\end{enumerate}
+
+\paragraph{Beispiel} $\mu$ einer Normalverteilung schätzen.
+\begin{align*}
+    \hat{\mu}(X_1, X_2, \dots, X_n) &= \frac{X_1+ X_2+ \dots+ X_n}{n} = \frac{1}{n}\sum_{i=1}^n X_i 
+\end{align*}
+
+\subsection{Qualitätskriterien für Schätzer}
+\begin{enumerate}
+\item Konsistenz: Mehr Daten füren zu genauerem Ergebnis
+    $$ \lim_{n\to\infty} \vartheta(X_1, ..., X_n) = \vartheta $$
+    Beispiel: $\hat{\mu} (X_1, ..., X_n) = M_n,\ P(|M_n - \mu| > \varepsilon) \le \frac{\sigma^2}{n\varepsilon^2} \to 0 $ (Gesetz der grossen Zahlen)
+\item Erwartungstreu (unbiased):
+    $$ E(\hat{\vartheta}(X_1, ..., X_n)) = \vartheta$$
+    (vor allem für kleine $n$ nicht selbstverständlich)\\
+    Beispiel: $E(\hat{\mu}(X_1, ..., X_n)) = E\left(\frac{X_1+ X_2+ \dots+ X_n}{n}\right) = \frac{E(X_1)+ E(X_2)+ \dots+ E(X_n)}{n} = \mu$
+\item Maximum Likelyhood: 
+    ``Daten sollen möglichst gut passen''
+\item Fehler möglichst klein
+    $$ (\vartheta - \hat{\vartheta})^2 \text{ minimal im Mittel}$$
+    $\Rightarrow$ ``Minimum variance estimators''
+\end{enumerate}
+
+Varianz-Schätzer:
+\begin{align*}
+    \var(X) &= E(X^2) - E(X)^2 \\
+    \hat{\sigma^2} &= \frac{1}{n} \sum_{i=1}^n \left(x_i^2\right) - \left(\frac{1}{n} \sum_{i=1}^n x_i\right)^2
+\end{align*}
+
 \end{document}
