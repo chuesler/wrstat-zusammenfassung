@@ -1258,7 +1258,42 @@ Parameter schätzen:
 Varianz-Schätzer:
 \begin{align*}
     \var(X) &= E(X^2) - E(X)^2 \\
-    \hat{\sigma^2} &= \frac{1}{n} \sum_{i=1}^n \left(x_i^2\right) - \left(\frac{1}{n} \sum_{i=1}^n x_i\right)^2
+    V &= \frac{1}{n} \sum_{i=1}^n x_i^2 - \left(\frac{1}{n} \sum_{i=1}^n x_i\right)^2
 \end{align*}
+\begin{align*}
+    E(V) &= E\left(\frac{1}{n} \sum_{i=1}^n X_i^2 - \left(\frac{1}{n} \sum_{i=1}^n X_i\right)^2\right) \\
+         &= E\left(\frac{1}{n} \sum_{i=1}^n X_i^2 - \frac{1}{n^2} \sum_{i=1}^nX_i \sum_{j=1}^n X_j\right) \\
+         &= E\left(\left(\frac{1}{n}-\frac{1}{n^2}\right) \sum_{i=1}^n X_i^2 - \frac{1}{n^2} \sum_{i\neq j} X_iX_j \right) \\
+         &= \frac{n-1}{n^2} \sum_{i=1}^n E(X_i^2) - \frac{1}{n^2} \sum_{i\neq j} E(X_i)E(X_j) & \teXt{(Unabhängigkeit)} \\
+\end{align*}
+Aber: $X_i$ sind Messungen des gleichen Experimentes $X$
+\begin{align*}
+  \Rightarrow E(X_i) &= E(X),\quad E(X_i^2) = E(X^2) \\
+  \Rightarrow E(V) &= \frac{n-1}{n^{\cancel{2}}} \cancel{n} E(X^2) - \frac{1}{n^{\cancel{2}}}(n^{\cancel{2}}-\cancel{n}\ 1) E(X)^2 \\
+  &= \frac{n}{n-1} \left(E(X^2) - E(X)^2\right) = \frac{n-1}{n} \var(X) \neq \var(X)
+\end{align*}
+
+Dieser Schätzer ist konsistent, aber er ist nicht erwartungstreu: Statt gegen $1$ geht das Resultat gegen $\frac{n-1}{n}$ für standardnormalverteilte Zufallsvariablen.
+
+Konkreter: 
+\begin{align*}
+  S^2 = \hat{\sigma}^2 = \frac{n}{n-1} \left(\frac{1}{n} \sum_{i=1}^n x_i^2 - \left(\frac{1}{n} \sum_{i=1}^n x_i\right)^2 \right)
+\end{align*}
+ist ein erwartungstreuer Varianz-Schätzer.
+
+\subsection{Maximum Likelyhood-Prinzip: Wie kommt man auf Schätzformeln?}
+
+Idee: Messdaten sollten ``wahrscheinlich'' sein, wenn man den geschätzten Parameter für die Verteilung verwendet.
+
+\paragraph{Beispiel} $\mu$ einer Normalverteilung.
+
+``Wahrscheinlichkeit'' der Messwerte kann so ausgedrückt werden:
+\begin{align*}
+    &``P(X_1=x_1 \wedge X_2=x_2 \wedge \dots \wedge X_n=x_n) \\
+    &= P(X_1=x_1)P(X_2=x_2)\cdots P(X_n=x_n)'' \\
+    & \Rightarrow \varphi(x_1)\varphi(x_2)\cdots \varphi(x_n) = L(p)
+\end{align*}
+$L$ ist die Likelihood-Funktion. Offensichtlicherweise ist das Resultat vom gewählten $\mu$ abhängig. Das richtige $\hat{\mu}$ maximiert $L$. 
+
 
 \end{document}
