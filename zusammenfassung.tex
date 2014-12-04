@@ -1264,7 +1264,7 @@ Varianz-Schätzer:
     E(V) &= E\left(\frac{1}{n} \sum_{i=1}^n X_i^2 - \left(\frac{1}{n} \sum_{i=1}^n X_i\right)^2\right) \\
          &= E\left(\frac{1}{n} \sum_{i=1}^n X_i^2 - \frac{1}{n^2} \sum_{i=1}^nX_i \sum_{j=1}^n X_j\right) \\
          &= E\left(\left(\frac{1}{n}-\frac{1}{n^2}\right) \sum_{i=1}^n X_i^2 - \frac{1}{n^2} \sum_{i\neq j} X_iX_j \right) \\
-         &= \frac{n-1}{n^2} \sum_{i=1}^n E(X_i^2) - \frac{1}{n^2} \sum_{i\neq j} E(X_i)E(X_j) & \teXt{(Unabhängigkeit)} \\
+         &= \frac{n-1}{n^2} \sum_{i=1}^n E(X_i^2) - \frac{1}{n^2} \sum_{i\neq j} E(X_i)E(X_j) & \text{(Unabhängigkeit)} \\
 \end{align*}
 Aber: $X_i$ sind Messungen des gleichen Experimentes $X$
 \begin{align*}
@@ -1285,15 +1285,115 @@ ist ein erwartungstreuer Varianz-Schätzer.
 
 Idee: Messdaten sollten ``wahrscheinlich'' sein, wenn man den geschätzten Parameter für die Verteilung verwendet.
 
-\paragraph{Beispiel} $\mu$ einer Normalverteilung.
-
 ``Wahrscheinlichkeit'' der Messwerte kann so ausgedrückt werden:
 \begin{align*}
     &``P(X_1=x_1 \wedge X_2=x_2 \wedge \dots \wedge X_n=x_n) \\
     &= P(X_1=x_1)P(X_2=x_2)\cdots P(X_n=x_n)'' \\
-    & \Rightarrow \varphi(x_1)\varphi(x_2)\cdots \varphi(x_n) = L(p)
+    & \Rightarrow \varphi(x_1, \vartheta)\varphi(x_2, \vartheta)\cdots \varphi(x_n, \vartheta) = L(\vartheta) \quad \text{ mit } \varphi(x, \vartheta) \text{ Dichtefunktion}
 \end{align*}
-$L$ ist die Likelihood-Funktion. Offensichtlicherweise ist das Resultat vom gewählten $\mu$ abhängig. Das richtige $\hat{\mu}$ maximiert $L$. 
+Die Likelihood-Funktion $L(\hat{\vartheta})$ soll maximiert werden.
+
+\ifincludeExamples
+\paragraph{Beispiel} $\mu$ einer Normalverteilung.
+\begin{align*}
+ \varphi(x, \mu) &= \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}} \\
+  L(\mu) &=  \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x_1-\mu)^2}{2\sigma^2}} 
+              \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x_2-\mu)^2}{2\sigma^2}} \cdots 
+              \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x_n-\mu)^2}{2\sigma^2}} \\
+         &= \left(\frac{1}{\sqrt{2\pi}\sigma} \right)^n \exp\left(-\frac{1}{2\sigma^2} \left((x_1-\mu)^2 + 
+           (x_2-\mu)^2 + \dots + (x_n-\mu)^2\right)\right)\\
+\end{align*}
+Prinzip: Wähle $\hat{\mu}$ so, dass $L(\hat{\mu})$ maximal wird $\Longleftrightarrow$ wähle $\hat{\mu}$ so, dass $(x_1-\mu)^2 + 
+           (x_2-\mu)^2 + \dots + (x_n-\mu)^2$ möglichst klein ($e^{-x}$ mit $x\ge 0$ ist maximal bei $x=0$).
+
+Das ist also ein Minimalproblem:
+\begin{align*}
+  f(\mu) &= (x_1-\mu)^2 + (x_2-\mu)^2 + \dots + (x_n-\mu)^2 \\
+  f'(\mu) &= 2x_1 - 2\mu + 2x_2 - 2\mu \dots + 2x_n - 2\mu = 0 \\
+        0 &= x_1 + x_2 + \dots + x_n - n\mu \\
+\hat{\mu} &= \mu = \frac{x_1+x_2+\dots+x_n}{n} & \text{``funktioniert''}
+\end{align*}
+\fi
+\ifincludeExamples
+\paragraph{Beispiel} $\lambda$ einer Poisson-Verteilung
+
+Aus dem Katalog:
+\begin{align*}
+  \lambda = E(X), \qquad \lambda = \var(X)
+\end{align*}
+
+\begin{align*}
+  \text{Poissonverteilung: } \ & P(X=k) = e^{-\lambda} \frac{\lambda^k}{k!} \\
+  \text{Messdaten: }\ & k_1, k_2, \dots k_n \\
+  \text{Likelihood-Funktion: }\ & L(\lambda) = e^{-\lambda} \frac{\lambda^k_1}{k_1!} e^{-\lambda} \frac{\lambda^k_2}{k_2!} \cdots 
+            e^{-\lambda} \frac{\lambda^k_n}{k_n!}
+          = \frac{1}{k_1!k_2!\cdots k_n!}\, e^{-n\lambda}\, \lambda^{k_1+k_2+\dots+k_n}
+\end{align*}
+\begin{align*}
+  k_1!k_2!\cdots k_n! L'(\lambda) &= -n e^{-n\lambda} \lambda^{k_1+\dots+k_n} + e^{-n\lambda} 
+        (k_1+\dots+k_n) \lambda^{k_1+\dots+k_n - 1} = 0 \\
+    &\Leftrightarrow \underbrace{e^{-n\lambda}}_{\neq 0} \underbrace{\lambda^{k_1+\dots+k_n - 1}}_{\neq 0} 
+      \underbrace{(-n\lambda + k_1+\dots+k_n)}_{\stackrel{!}{=}0} = 0 \\
+      \hat{\lambda} &= \lambda = \frac{k_1 + k_2 + \dots + k_n}{n} & \text{``funktioniert''}
+\end{align*}
+\fi
+\ifincludeExamples
+\paragraph{Beispiel} $b$ einer Gleichverteilung auf $[0, b]$
+
+\begin{align*}
+  \varphi(x, b) &= \begin{cases} \frac{1}{b} & 0 \le x \le b \\ 0 & \text{sonst}\end{cases} \\
+  L(b) &= \begin{cases} \frac{1}{b^n} & \forall i:  x_i \le b \\ 0 & \exists x_i > b\end{cases} \\
+  \Rightarrow \hat{b} & = \max(x_1, x_2, \dots, x_n)
+\end{align*}
+
+Ist $\hat{b}$ ein ``guter'' Schätzer?
+\begin{itemize}
+\item Konsistenz: Ja
+\item Erwartungstreue: 
+\begin{align*}
+F_{\max(X_1, \dots, X_n)} (x) & = P(\max(X_1, \dots, X_n) \le x) \\
+                             &= P(X_1 \le x \wedge X_2 \le x \wedge \dots \wedge X_n \le x) \\
+                             &= P(X_1 \le x)P(X_2 \le x)\cdots P(X_n \le x) \\
+                             &= \begin{cases} \left(\frac{1}{b} x\right)^n & x \le b \\ 0 & \text{sonst} \end{cases}\\
+\varphi_{\max(X_1, \dots, X_n)}(x) &= \begin{cases} \frac{1}{b^n} nx^{n-1} & x \le b \\ 0 & \text{sonst} \end{cases} \\
+E(\max(X_1, \dots, X_n)) &= \int_{-\infty}^\infty x\varphi(x) dx = \int_0^b x \frac{1}{b^n}n x^{n-1}dx \\
+                         &= \frac{n}{b^n}\int_0^b x^n dx = \frac{n}{b^n}\left[\frac{1}{n+1}x^{n+1}\right]_0^b 
+                          = \frac{n}{n+1} \frac{b^{n+1}}{b^n} = \underbrace{\frac{n}{n+1}}_{<1}b < b \\
+\Rightarrow \text{erwartungstreuer Schätzer: } & \hat{b} = \frac{n+1}{n} \max(X_1, \dots, X_n)
+\end{align*} 
+\end{itemize}
+\fi
+
+\subsection{Konfidenzintervalle}
+\begin{description}
+\item[Problem] Wie wahrscheinlich ist es, dass eine Schätzung ``total'' falsch ist?
+\item[Ziel] Risiko einer Falschbehauptung kontrollieren
+\item[Gesucht] Interval $[\mu_{-}, \mu_{+}] \ni \hat{\mu}$, das mit Wahrscheinlichkeit $1-\alpha$ das wahre $\mu$ enthält.
+\end{description}
+
+\begin{align*}
+   \text{ normalverteilt} \qquad \hat{\mu} &= \frac{X_1 + \dots + X_n}{n} & X_i\\
+  \Rightarrow \hat{\mu} \text{ normalverteilt:} \qquad
+   E(\hat{\mu}) & = \mu \\
+  \var(\hat{\mu}) &= \frac{\sigma^2}{n}
+\end{align*}
+
+\paragraph{1. Fall} $\sigma^2$ bekannt
+\begin{align*}
+  P(\mu_{-} < X \le \mu_{+}) &&\text{standardisieren} \\
+  = P(\underbrace{\frac{\mu_{-} -\hat{\mu}}{\frac{\sigma}{\sqrt{n}}}}_{z_{-}} \le 
+      \underbrace{\frac{X -\hat{\mu}}{\frac{\sigma}{\sqrt{n}}}}_{Z} \le 
+      \underbrace{\frac{\mu_{+} -\hat{\mu}}{\frac{\sigma}{\sqrt{n}}}}_{z_{+}}) && z_-, z_+ \text{ aus Tabelle} \\
+      \Rightarrow \text{Konfidenzintervall} \left[\hat{\mu}-z_+ \frac{\sigma}{\sqrt{n}}, \hat{\mu} + z_+ \frac{\sigma}{\sqrt{n}}\right]
+\end{align*}
+
+\paragraph{2. Fall} $\sigma^2$ unbekannt, muss geschätzt werden
+
+$\frac{X - \hat{\mu}}{\hat{\frac{\sigma}{n}}}$ wird unsicher und hat Student/t-Verteilung.
+
+Hängt ab von: $n-1$ Freiheitsgrade, $1-\alpha$.
+
+Für grosse $n$ ist der 1. Fall anwendbar (Normalverteilt).
 
 
 \end{document}
