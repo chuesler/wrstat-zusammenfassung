@@ -1395,5 +1395,92 @@ Hängt ab von: $n-1$ Freiheitsgrade, $1-\alpha$.
 
 Für grosse $n$ ist der 1. Fall anwendbar (Normalverteilt).
 
+\section{Hypothesentests}
+\subsection{Test der Wahrscheinlichkeit in einem Bernoulli-Experiment}
 
+\begin{itemize}
+\item Nullhypothese: Wahrscheinlichkeit in einem Bernoulli-Experiment ist $p$
+\item Messdaten: $X$ ist Anzahl eingetretene Ereignisse, $n$ Versuche
+\item Bekannt: $X$ ist binomialverteilt mit Parametern $n$, $p$
+\item Falsifizierbar: Grosses oder kleines $X$ lässt Hypothese zweifelhaft erscheinen
+\item $\alpha$ ist die Wahrscheinlichkeit für ``false negative''
+\item Gesucht: Unverdächtiges Interval für $X$
+\end{itemize}
+
+\begin{align*}
+  P(x_- \le X \le x_+) &= 1 - \alpha \\
+  P(\frac{x_- - \mu}{\sigma} \le \frac{X-\mu}{\sigma} \le \frac{x_+-mu}{\sigma}) &= 1-\alpha & \mu=np, \sigma=\sqrt{np(1-p)}\  \text{(Datenblatt)} \\
+  \frac{X-np}{\sqrt{np(1-p)}} & \sim \text{standardnormalverteilt}
+\end{align*}
+
+Entscheidung: Falls $\left|\frac{X-np}{\sqrt{np(1-p)}}\right| > x_{kritisch}$ ist die Nullhypothese mit Wahrscheinlichkeit $1-\alpha$ falsch.
+Andernfalls zweifeln wir nicht an der Hypothese.
+
+\subsection{Test einer diskreten Verteilung ($\chi^2$-Test)}
+\begin{itemize}
+\item Experiment: $d+1$ verschiedene Ausgänge: $0, 1, \dots, d$
+\item Nullhypothese: $P(i) = p_i$ (z.B. 7er-Würfel: $p_i=\frac{1}{7}$) 
+\item Messdaten: $n$ Versuche: $n_i$ = Anzahl Eintreten von $i$
+\item Erwartung: $n_i \cong np_i$
+\item Problem: Wir brauchen eine ``Messgrösse'' (Statistik) die angibt, wie gross die Abweichung ist
+\end{itemize}
+Aufgabe: Finde symmetrischen Ersatz für $\frac{X-np}{\sqrt{np(1-p)}}$.
+
+\begin{align*}
+  D &= \frac{(X-np)^2}{np(1-p)} = \frac{(X-np)^2}{n} \frac{1 - p + p}{p(1-p)} \\
+    &= \frac{(X-np)^2}{n} \left(\frac{\cancel{1 - p}}{p\cancel{(1-p)}} + \frac{\cancel{p}}{\cancel{p}(1-p)}\right) \\
+    &= \frac{(X-np)^2}{np} + \frac{(X-np)^2}{n(1-p)} \\
+    &= \frac{(X-np)^2}{np} + \frac{(\overbrace{n-X}^{Anz. nicht-Eintreten}-n+np)^2}{n(1-p)} \\
+    &= \frac{(X-np)^2}{np} + \frac{((n-X) -n(1-p))^2}{n(1-p)} & \frac{\text{Anzahl eingetreten} - \text{Erwartete Anzahl}}{\text{Erwartete Anzahl}} \\
+  D &= \sum_{i=0}^d \frac{(n_i-np_i)^2}{np_i} &\text{Diskrepanz (Karl Pearson, 1900)}
+\end{align*}
+
+$D$ ist (angenähert) $\chi^2$-verteilt mit $d$ Freiheitsgraden (siehe Tabelle).
+
+\paragraph{Beispiel} Test eines Würfels ($\chi^2$-Test)
+\begin{itemize}
+\item Nullhypothese: $p_i = \frac{1}{6}$ (fairer Würfel)
+\end{itemize}
+\begin{center}
+\begin{tabular}{c|c|c|c|c}
+$i$ & $n_i$ & $p_i$ & $np_i$ & $\frac{(n_i-np_i)^2}{np_i}$ \\
+\hline
+1 & 21 & $\frac{1}{6}$ & $16.66\dots$ & $1.12671$ \\
+2 & 18 & $\frac{1}{6}$ & $16.66\dots$ & $0.10668$ \\
+3 & 16 & $\frac{1}{6}$ & $16.66\dots$ & $0.02666$ \\
+4 & 17 & $\frac{1}{6}$ & $16.66\dots$ & $0.00667$ \\
+5 & 15 & $\frac{1}{6}$ & $16.66\dots$ & $0.16665$ \\
+6 & 13 & $\frac{1}{6}$ & $16.66\dots$ & $0.80664$ \\
+\hline
+& $n=100$ &&& $D=2.24001$
+\end{tabular}
+\end{center}
+
+\begin{align*}
+\alpha &= 5\% \\
+D_{krit} &= 11.07
+\end{align*}
+
+Entscheid: $D > D_{krit}?$ Nein $\Rightarrow$ kein Zweifel an der Nullhypothese.
+
+Faustregel: Der $\chi^2$-Test funktioniert, wenn alle $n_i\ge 5$ sind. 
+
+\subsection{Testen einer stetigen Verteilung (Kolmogorov-Smirnov-Test)}
+
+Der bisherige Ansatz funktioniert nur für diskrete Werte.
+\begin{itemize}
+\item Hypothese: Mandarinendurchmesser sind normalverteilt
+\item Diskretisierung: Klassenbildung: $n_i$ = Anzahl Mandarinen in Klasse $i$, $p_i = P(X \text{ in Klasse } i)$
+\end{itemize}
+
+$\Rightarrow \chi^2$-Test 
+
+\paragraph{Probleme}
+\begin{itemize}
+\item $n_i \ge 5$ notwendig
+\item wenige Beobachtungen $\Rightarrow$ wenige Klassen
+\end{itemize}
+
+\paragraph{Bessere Idee}
+Anstatt die Dichte-Funktion mit dem Histogramm zu vergleichen, verwende die Verteilungsfunktion. Dazu werden die Experiment-Resultate als empirische Verteilung (Treppenfunktion) dargestellt, mit $K_- = \text{grösster Fehler nach unten}$ und $K_+=\text{grösster Fehler nach oben}$. Die Nullhypothese ist falsch, wenn $K_-$ oder $K_+$ zu gross. 
 \end{document}
