@@ -1467,6 +1467,7 @@ Faustregel: Der $\chi^2$-Test funktioniert, wenn alle $n_i\ge 5$ sind.
 
 \subsection{Testen einer stetigen Verteilung (Kolmogorov-Smirnov-Test)}
 
+\ifincludeDerivations
 Der bisherige Ansatz funktioniert nur für diskrete Werte.
 \begin{itemize}
 \item Hypothese: Mandarinendurchmesser sind normalverteilt
@@ -1482,5 +1483,40 @@ $\Rightarrow \chi^2$-Test
 \end{itemize}
 
 \paragraph{Bessere Idee}
-Anstatt die Dichte-Funktion mit dem Histogramm zu vergleichen, verwende die Verteilungsfunktion. Dazu werden die Experiment-Resultate als empirische Verteilung (Treppenfunktion) dargestellt, mit $K_- = \text{grösster Fehler nach unten}$ und $K_+=\text{grösster Fehler nach oben}$. Die Nullhypothese ist falsch, wenn $K_-$ oder $K_+$ zu gross. 
+Anstatt die Dichte-Funktion mit dem Histogramm zu vergleichen, verwende die Verteilungsfunktion. Dazu werden die Experiment-Resultate als empirische Verteilung (Treppenfunktion) dargestellt, mit $K_- = \text{grösster Fehler nach unten}$ und $K_+=\text{grösster Fehler nach oben}$. Die Nullhypothese ist falsch, wenn $K_-$ oder $K_+$ zu gross.
+\fi
+
+\begin{itemize}
+\item Daten: $X_1, X_2, \dots, x_n$
+\item Hypothese: $X_i$ sind verteilt mit Verteilungsfunktion $F$
+\item Statistik: Maximale Abweichung zwischen $F$ und der empirischen Verteilungsfunktion $F_{emp}$
+\end{itemize}
+
+Berechnung der Abweichung: Verwende sortierte Daten ($X_1 \le X_2 \le \dots \le X_n$).
+
+\begin{align*}
+\text{Abweichung nach oben: bei } x_j: \quad & \max_{1\le j \le n}\left(\frac{j}{n} - F(x_j)\right) \\
+\text{Abweichung nach unten: bei } x_j: \quad & \max_{1\le j \le n}\left(F(x_j) - \frac{j-1}{n}\right) 
+\end{align*}
+
+Korrektur für grosse $n$: 
+\begin{align*)
+K_n^+ &= \sqrt{n} \max_{1\le j \le n}\left(\frac{j}{n} - F(x_j)\right) \\
+K_n^- &= \sqrt{n} \max_{1\le j \le n}\left(F(x_j) - \frac{j-1}{n}\right)
+\end{align*}
+
+Vorgehen:
+\begin{itemize}
+\item ermittle $K_{krit}$ aus Tabelle ($p=1-\alpha$, $n$)
+\item $K_n^+ > K_{krit}$ oder $K_n^- > K_{krit}$ $\Rightarrow$ Hypothese verwerfen
+\end{itemize}
+
+In Software: $p$-Value $\le \alpha \Rightarrow$ Hypothese verwerfen 
+
+\subsection{Test: Vergleich zweier Mittelwerte}
+\begin{itemize}
+\item Zwei Messreihen: Mittelwerte $\mu_1, \mu_2$, Standardabweichungen $\sigma_1, \sigma_2$, Anzahl Werte $n, m$
+\item Nullhypothese: Kein Unterschied
+\item Statistik: $t = \frac{\mu_1 - \mu_2}{(n-1)\sigma_1^2 - (m-1)\sigma_2^2} \sqrt{\frac{mn(n+m-2)}{n+m}$ ist $t$-verteilt mit $n+m-2$ Freiheitsgraden
+\end{itemize}
 \end{document}
