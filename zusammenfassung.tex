@@ -1495,12 +1495,12 @@ Anstatt die Dichte-Funktion mit dem Histogramm zu vergleichen, verwende die Vert
 Berechnung der Abweichung: Verwende sortierte Daten ($X_1 \le X_2 \le \dots \le X_n$).
 
 \begin{align*}
-\text{Abweichung nach oben: bei } x_j: \quad & \max_{1\le j \le n}\left(\frac{j}{n} - F(x_j)\right) \\
-\text{Abweichung nach unten: bei } x_j: \quad & \max_{1\le j \le n}\left(F(x_j) - \frac{j-1}{n}\right) 
+\text{Abweichung nach oben: bei } x_j: \quad & \max_{1\le j \le n}\left( \frac{j}{n} - F(x_j) \right) \\
+\text{Abweichung nach unten: bei } x_j: \quad & \max_{1\le j \le n}\left( F(x_j) - \frac{j-1}{n}\right) 
 \end{align*}
 
 Korrektur für grosse $n$: 
-\begin{align*)
+\begin{align*}
 K_n^+ &= \sqrt{n} \max_{1\le j \le n}\left(\frac{j}{n} - F(x_j)\right) \\
 K_n^- &= \sqrt{n} \max_{1\le j \le n}\left(F(x_j) - \frac{j-1}{n}\right)
 \end{align*}
@@ -1517,6 +1517,74 @@ In Software: $p$-Value $\le \alpha \Rightarrow$ Hypothese verwerfen
 \begin{itemize}
 \item Zwei Messreihen: Mittelwerte $\mu_1, \mu_2$, Standardabweichungen $\sigma_1, \sigma_2$, Anzahl Werte $n, m$
 \item Nullhypothese: Kein Unterschied
-\item Statistik: $t = \frac{\mu_1 - \mu_2}{(n-1)\sigma_1^2 - (m-1)\sigma_2^2} \sqrt{\frac{mn(n+m-2)}{n+m}$ ist $t$-verteilt mit $n+m-2$ Freiheitsgraden
+\item Statistik: $t = \frac{\mu_1 - \mu_2}{(n-1)\sigma_1^2 - (m-1)\sigma_2^2} \sqrt{\frac{mn(n+m-2)}{n+m}}$ ist $t$-verteilt mit $n+m-2$ Freiheitsgraden
 \end{itemize}
+
+\section{Filtern}
+
+Varianten um Messfehler zu vermeiden:
+\begin{itemize}
+\item Mittelwerte - Problematisch, da viele Messungen benötigt werden
+\item Physik - Verwendung bekannter Modelle zur Plausibilisierung der Messungen
+\end{itemize}
+
+\paragraph{Beispiel} Aus fehlerhaften Positionsmessungen eine optimale Schätzung ableiten
+
+Das Messgerät befindet sich an der (unbekannten) Position $x_k$ zum Zeitpunkt $k$ und misst $z_k$ mit Fehler $\varrho^2$ (z.B. aus Datenblatt des Messgerätes).
+
+Annahme (Physik): Die Position bleibt gleich: $x_{k+1} = x_k$. Wenn wir uns bewegen beinhaltet dies einen Annahme- oder System-Fehler $\sigma^2$.
+
+Der Filter soll zu jeder Zeit $k$ eine Schätzung $\hat{x}_k$ liefern und den Schätzfehler $p_k^2$ angeben.
+
+Schritt $k\to k+1$: aus $\hat{x}_k$ und $Z_{k+1} \leadsto \hat{x}_{k+1}$ 
+\begin{align*}
+\text{aus Annahme: } \qquad \hat{x}_{k+1|k} &= \hat{x}_k & \text{Fehler } p_k^2 + \sigma^2 \\
+\text{aus Messung: } \qquad \hat{x}_{k+1} &= (1-K) \hat{x}_{k+1|k} + Kz_{k+1} \\
+   K &= \begin{cases} 0& \text{ignoriere Messung, vertraue Vorhersage}\\1 &\text{vertraue Messung, ignoriere Vorhersage} \end{cases}\\
+\text{Fehler: } \qquad var(\hat{x}_{k+1}) &= (1-K)^2 \underbrace{\var(\hat{x}_{k+1|k})}_{p_k^2 + \sigma^2} + K^2 \underbrace{\var(z_{k+1})}_{\varrho^2} = p_{k+1}^2
+\end{align*}
+
+Finde das optimale $K$:
+\begin{align*}
+0 &= \frac{d}{dK} \left[ (1-K)^2 (p_k^2+\sigma^2) + K^2 \varrho^2 \right]  \\
+0 &= -\cancel{2} (1-K) (p_k^2 + \sigma^2) + \cancel{2} K\varrho^2  \\
+K(p_k^2 + \sigma^2 + \varrho^2) &= p_k^2 + \sigma^2 \\
+K &= \frac{p_k^2 + \sigma^2}{p_k^2+\sigma^2+\varrho^2}
+\end{align*}
+
+Wenn der Messfehler $\varrho^2$ gross ist geht $K$ gegen 0 und wir vertrauen der Messung nicht. Wenn der Fehler klein ist geht $K$ gegen 1 und wir vertrauen der Messung.
+
+\paragraph{Systembeschreibung Überschallrakete} Offensichtlicherweise ist die oben getroffene Annahem nicht immer korrekt.
+
+\begin{itemize}
+\item Messung: Beschleunigung $a$
+\item zu Bestimmen: Geschwindigkeit $v$
+\end{itemize}
+
+Aus der Physik ist bekannt, dass $\Delta v = a \Delta t$.
+
+Annahme: $a$ ist konstant.
+
+Systemzustand: 
+\begin{align*}
+x_k = \left(\begin{matrix} v_k \\ a_k \end{matrix} \right) , \quad 
+  \text{Physik: } 
+  x_{k+1} = \left( \begin{matrix} 
+  v_k+a_k\Delta t \\ a_{k+1} 
+  \end{matrix}\right) 
+    = \underbrace{\left(\begin{matrix} 1 & \Delta t \\ 0 & 1\end{matrix}\right)}_{\varphi} x_k \\
+\text{Fehler: } \left(\begin{matrix} \sigma_1^2 & 0 \\ 0 \sigma_2^2 \end{matrix}\right) 
+\end{align*}
+
+Messung: Sensor misst $a$ mit einem bekannten Messfehler $\varrho^2$.
+
+\begin{align*}
+\text{Messmatrix: } a_k = \left(\begin{matrix}0 & 1\end{matrix}\right) \left( \begin{matrix}v_k \\ a_k\end{matrix} \right)
+\end{align*}
+
+Konstruktion des Filters:
+\begin{align*}
+\text{Vorhersage: } \hat{x}_{k+1} &= \varphi \hat{x}_k \\
+\text{Messung: } \hat{x}_{k+1} &= K'\hat{x}_{k+1|k} + K z_{k+1} & K \text{ und } K' \text{ sind jetzt Matrizen!}
+\end{align*}
 \end{document}
