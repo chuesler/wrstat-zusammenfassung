@@ -19,10 +19,10 @@
 \renewcommand{\arraystretch}{1.2}
 
 \newif\ifincludeExamples
-\includeExamplestrue % comment out to disable examples
+%\includeExamplestrue % comment out to disable examples
 
 \newif\ifincludeDerivations
-\includeDerivationstrue % comment out to disable derivations
+%\includeDerivationstrue % comment out to disable derivations
 
 \title{Wahrscheinlichkeitsrechnung und Statistik}
 \author{Christoph H\"usler $\langle$chuesler@hsr.ch$\rangle$ } 
@@ -114,7 +114,8 @@ Die gemessenen Werte konvergieren mit einem Fehler der Grössenordnung $\frac{1}
 $A \subset B$ & $P(A) \leq P(B)$ \\
 $\varnothing \subset A \subset \Omega$ & $0 = P(\varnothing) \leq P(A) \leq P(\Omega) = 1$ \\
 $\bar{A}$ & $P(\bar{A}) + P(A) = 1 \Rightarrow P(\bar{A}) = P(\Omega \setminus A) = 1 - P(A)$ \\
-$A \cup B$ & $ P(A\cup B) = P(A) + P(B) - P(A\cap B)$ \\
+$A \cup B$ & $ P(A\cup B) = P(A) + P(B) - P(A\cap B)$ \\ 
+& (bei mehr als 3 Mengen: Abwechslungsweise $-$ und $+$) \\
 A, B unabhängig & $P(A\cap B) \stackrel{!}{=} P(A)P(B)$\\[2pt]
 $A\ |\ B$ & $P(A\ |\ B) = \frac{P(A\cap B)}{P(B)}$ \\[2pt]
 $A$ wenn $A\ |\ B_i$ vorliegen & $ P(A) = \sum_{i=1}^n P(A\ |\ B_i) \cdot P(B_i) $
@@ -464,7 +465,7 @@ h_n = \frac{X_1 + X_2 + \dots + X_n}{n} = M_n& & P(|M_n - \mu| > \,\varepsilon) 
 P(|h_n - P(A)| > \,\varepsilon) & \le \frac{P(A)(1-P(A))}{n\,\varepsilon^2} \le \frac{1}{4n\,\varepsilon^2} \qquad(\text{da } x(1-x) \le \frac{1}{4})
 \end{align*}
 
-\subsection{Anwendung: Lineare Regression}
+\subsection{Anwendung: Lineare Regression}\label{section-lineare-regression}
 Zwei Zufallsvariablen $X$, $Y$, mit $Y\approx aX+b$. Das Ziel ist, für Messungen $x_i, y_i$ bestmögliche $a$ und $b$ zu ermitteln.
 
 \ifincludeExamples
@@ -495,7 +496,7 @@ Das ist ein Optimierungsproblem. Idee: Ableiten.
 \end{align*}
 \fi
 \begin{align*}
-                   a &= \frac{\cov(X, Y)}{\var(X)} \\
+                   a &= \frac{E(XY) - E(X)E(Y)}{E(X^2) - E(X)^2} = \frac{\cov(X, Y)}{\var(X)} \\
                    b &= E(Y) - aE(X)
 \end{align*}
 
@@ -517,8 +518,8 @@ Link zu Messdaten:
 
 \begin{align*}
 \text{Mittelwert: } \qquad E(X) & = \frac{1}{n}\sum_{i=1}^n x_i \\
-                              a & = \frac{\frac{1}{n}\sum_{i=1}^n x_iy_i - \frac{1}{n^2}\sum_{i=1}^n x_i\sum_{j=1}^n y_j}{\frac{1}{n}\sum_{i=1}^n x_i^2 - \left(\frac{1}{n}\sum_{j=1}^n x_i\right)^2} \\
-                              b & = E(Y) - aE(X) = \frac{1}{n}\sum_{i=1}^n x_i - a\frac{1}{n}\sum_{i=1}^n y_i
+                              a & = \frac{n\sum\limits_{i=1}^n x_iy_i - \sum\limits_{i=1}^n x_i\sum\limits_{i=1}^n y_i}{n\sum\limits_{i=1}^n x_i^2 - \left(\sum\limits_{i=1}^n x_i\right)^2} \\
+                              b & = E(Y) - aE(X) = \frac{1}{n}\sum_{i=1}^n y_i - a\frac{1}{n}\sum_{i=1}^n x_i
 \end{align*}
 
 Diese Formeln zeigen uns, dass es möglich ist, lineare Regression durchzuführen ohne grosse Speicher zu benötigen.
@@ -882,7 +883,7 @@ E(X) &= \sum_{k=0}^{n} k \binom{n}{k} p^k(1-p)^{n-k} \\
 \end{align*}
 \fi
 
-\subsubsection{Berechnung für grosse $n$}
+\subsubsection{Berechnung für grosse $n$}\label{section-binomial-grosseZahlen}
 Die direkte Berechnung ist schwirig für grosse $n$. Lösungsansätze:
 
 \paragraph{Seltene Ereignisse} ``selten'' = $n$ gross, $p$ klein. Berechnung durch Poisson-Verteilung.
@@ -1097,7 +1098,6 @@ Dichtefunktion & $\varphi(x) = \begin{cases} C_\alpha\ x^{-\alpha} & x\ge x_{min
 Erwartungswert & $ E(X) = \frac{\alpha-1}{\alpha-2} x_{min}$ wenn $\alpha > 2$ \\
 Varianz & $\var(X) = \left( \frac{\alpha-1}{\alpha-3} - \left(\frac{\alpha-1}{\alpha-2}\right)^2 \right) x_{min}^2$ wenn $\alpha>3$ \\
 Median & $\median(X) = 2^{\frac{1}{\alpha-1}} x_{min}$ \\
-80-20-Regel & \\
 \end{tabular}
 
 $\alpha$ ist auch bekannt als ``Gini-Koeffizient''.
@@ -1166,6 +1166,7 @@ Potenzverteilung mit $\alpha < 3$ hat keine Varianz!
 Der Median funktioniert also für all $\alpha>1$.
 \fi
 
+\ifincludeExamples
 \subsection{80/20-Regeln}
 Voraussetzung: Wir haben eine Potenzverteilung mit Exponent $\alpha$.
 
@@ -1211,6 +1212,7 @@ Was bedeutet $\alpha$?
     $\alpha$ gross & $\frac{2-\alpha}{1-\alpha} \approx 1 \rightarrow$ ``Kommunismus''
 \end{tabular}
 \end{center}
+\fi
 
 \section{Schätzen}
 Standardalgorithmus
@@ -1219,7 +1221,7 @@ Standardalgorithmus
 \item Parameter: $\mu, \sigma^2, n, p, a, \lambda, \alpha, x_{min}$
     \begin{itemize}
         \item aus der Theorie
-        \item aus den Messunagen: Schätzen
+        \item aus den Messungen: Schätzen
     \end{itemize}
 \item Wahrscheinlichkeiten, Kennzahlen, etc. berechnen
 \item Stimmt die Verteilung: Hypothesentest
@@ -1395,7 +1397,7 @@ Hängt ab von: $n-1$ Freiheitsgrade, $1-\alpha$.
 
 Für grosse $n$ ist der 1. Fall anwendbar (Normalverteilt).
 
-\section{Hypothesentests}
+\section{Hypothesentests}\label{section-tests}
 \subsection{Test der Wahrscheinlichkeit in einem Bernoulli-Experiment}
 
 \begin{itemize}
@@ -1409,7 +1411,7 @@ Für grosse $n$ ist der 1. Fall anwendbar (Normalverteilt).
 
 \begin{align*}
   P(x_- \le X \le x_+) &= 1 - \alpha \\
-  P(\frac{x_- - \mu}{\sigma} \le \frac{X-\mu}{\sigma} \le \frac{x_+-mu}{\sigma}) &= 1-\alpha & \mu=np, \sigma=\sqrt{np(1-p)}\  \text{(Datenblatt)} \\
+  P(\frac{x_- - \mu}{\sigma} \le \frac{X-\mu}{\sigma} \le \frac{x_+-\mu}{\sigma}) &= 1-\alpha & \mu=np, \sigma=\sqrt{np(1-p)}\  \text{(Datenblatt)} \\
   \frac{X-np}{\sqrt{np(1-p)}} & \sim \text{standardnormalverteilt}
 \end{align*}
 
@@ -1520,6 +1522,7 @@ In Software: $p$-Value $\le \alpha \Rightarrow$ Hypothese verwerfen
 \item Statistik: $t = \frac{\mu_1 - \mu_2}{(n-1)\sigma_1^2 - (m-1)\sigma_2^2} \sqrt{\frac{mn(n+m-2)}{n+m}}$ ist $t$-verteilt mit $n+m-2$ Freiheitsgraden
 \end{itemize}
 
+\ifincludeDerivations
 \section{Filtern}
 
 Varianten um Messfehler zu vermeiden:
@@ -1587,4 +1590,103 @@ Konstruktion des Filters:
 \text{Vorhersage: } \hat{x}_{k+1} &= \varphi \hat{x}_k \\
 \text{Messung: } \hat{x}_{k+1} &= K'\hat{x}_{k+1|k} + K z_{k+1} & K \text{ und } K' \text{ sind jetzt Matrizen!}
 \end{align*}
+
+Idee: Optimale (minimale Fehler) Schätzung aus Modell und Messung. Dazu werden Informationen zu Fehlern in den Messungen sowie im Modell benötigt.
+
+Modellbeschreibung: $x_k \in \mathbb{R}^n$ (Zustandsvektor)
+Zeitentwicklung: $x_{k+1} = \varphi x_k + u_k$
+
+$u_k\in\mathbb{R}^n$ ist der Fehler des Modells, eine Zufallsvariable. Annahmen über $u_k$: 
+\begin{itemize}
+\item $E(u_k) = 0$
+\item Komponenten von $u_k$ unabhängig untereinander und von $x_k$
+\end{itemize}
+
+Grösse: Varianzen: $$E\left(u_k u_k'\right) = \left(\begin{matrix}
+  \sigma_1^2 &          & 0 \\
+             & \ddots   &  \\
+  0          &          & \sigma_n^2 \end{matrix}\right) = Q$$%TODO finish
+Messung: \begin{align*}
+z_k & = Hx_k + w_k \\
+& H: \text{ m x n-Matrix, }m:\text{ Anzahl Fehler, }w_k:\text{ Messfehler, }E(w_k)=0\\
+E(w_kw_k') &= \left(\begin{matrix} \varrho_1^2 & & 0 \\ & \ddots & \\ 0 & & \varrho_m^2 \end{matrix}\right) = R, \varrho_i^2 \text{ aus Datenblättern}
+\end{align*}
+
+Fehler der Schätzung:
+\begin{align*}
+\hat{x}_k - x_k  \text{ (Schätzfehler)} \\
+\hat{x}_{k|k-1} - x_k \text{ (Vorhersagefehler)}
+\end{align*}
+
+Messung des Fehlers: 
+\begin{align*}
+E((\hat{x}_{k|k-1} - x_k)(\hat{x}_{k|k-1} - x_k)') &= P_{k|k-1} & \text{Varianz der Messfehler auf der Diagonalen} \\
+E((\hat{x}_k-x_k)(\hat{x}_k-x_k)') &= P_k &\text{Varianz der Schätzfehler auf der Diagonalen}
+\end{align*}
+
+Berechnung des Vorhersagefehlers:
+\begin{align*}
+  P_{k|k-1} & = E((\hat{x}_{k|k-1} - x_k)(\dots)') \\
+            & = E((\varphi\hat{x}_{k-1} - x_k)(\dots)') \\
+            & = E((\varphi\hat{x}_{k-1} - \varphi x_{k-1} - u_{k-1})(\dots)') \\
+            & = E((\varphi(\underbrace{\hat{x}_{k-1} - x_{k-1}}_{\text{letzter Schätzfehler}}) - u_k)(\dots)') \\
+            & = \varphi P_{k-1} \varphi' + Q
+\end{align*}
+
+Formeln für den Kalman-Filter:
+\begin{align*}
+\text{Vorhersage:}\quad \hat{x}_{k+1} & = \varphi \hat{x}_k \\
+\text{Vorhersagefehler:}\quad P_{k|k-1} & = \varphi P_{k-1} \varphi' + Q \\
+\text{Messung:}\quad \hat{x}_{k+1} & = K'\hat{x}_{k+1|k} + K z_{k+1} \text{$K$ und $K'$ sind jetzt Matrizen!}\\
+\text{K:} \quad K &= P_{k|k-1} H' (HP_{k|k-1}H' + R)^{-1}
+\text{Korrektur:}\quad \hat{x}_k & = \hat{x}_{k|k-1} + K(z_k - H\hat{x}_{k|k-1}) \\
+     & = \underbrace{(I - KH)\hat{x}_{k|k-1}}_{``1-K''} + \underbrace{Kz_k}_{``K''}\\
+\text{Korrekturfehler:}\quad P_k & = (I-KH) P_{k|k-1} (I-KH)' + KRK'                      
+\end{align*}
+
+Ziel: K so wählen, dass $Spur(P_k)$ (Summe der Diagonal-Elemente) minimal ist.
+$Spur(BAB')$ nach jedem Element von $B$ ableiten, nullsetzen.
+
+Resultat: Alle Ableitungen von $Spur(BAB')$ bilden eine Matrix: $2BA$
+
+Minimumbedingung:
+\begin{align*}
+  0 &= - 2 (E-KH) P_{k|k-1} H' + 2KR \\
+  \text{Gleichung für } K \qquad P_{k|k-1}H' &= KH P_{k|k-1} H' + KR = K(HP_{k|k-1} + R) \\
+  K &= P_{k|k-1} H' (HP_{k|k-1}H' + R)^{-1}
+\end{align*}
+
+\fi
+
+\section{Vorgehensweise}
+\subsection{Parameter einer Verteilungsfunktion bestimmen}
+Ein Bernoulli-Experiment gelingt bei einer Untergrenze $a$ in $10\%$ der Fälle, bei einer Obergrenze $b$ ist es in $95\%$ aller Fälle eingetreten.
+
+\begin{enumerate}
+\item Verteilungsfunktion bestimmen\\
+In diesem Fall kann direkt die Normalverteilung verwendet werden (siehe Abschnitt \ref{section-binomial-grosseZahlen}).
+\item Aufschreiben der bekannten Werte
+\begin{align*} P(X < a) & = 0.1 \\ P(X\le b) & = 0.95 \end{align*}
+\item Normalverteilung: Standardisierung der Werte ($Z = \frac{X - \mu}{\sigma}$ anwenden)
+\begin{align*} 
+    P(\frac{X - \mu}{\sigma} < \frac{a-\mu}{\sigma}) & = 0.1 \quad\text{etc.}
+\end{align*}
+\item Verteilungsfunktion anwenden (bei Normalverteilung: Tabelle)
+Beachte: Die Tabelle im Skript beinhaltet nur $Z$-Werte ab 0.5. Für Werte unter 0.5: $Z' = 1-Z$, dann $Z'$ nachschlagen.
+\begin{align*} \Rightarrow \frac{a-\mu}{\sigma}  = -1.28, \quad& \frac{b-\mu}{\sigma} = 1.65 \end{align*}
+\item Gleichungssystem auflösen (Normalverteilung: nach $\mu, \sigma$)
+\end{enumerate}
+
+\subsection{Reihe von Messwerten: Wann war Nullübergang, ...}
+Lineare Regression verwenden (siehe Abschnitt \ref{section-lineare-regression})
+
+\subsection{Beweis, ob eine Hypothese zutrifft}
+\begin{enumerate}
+\item Null-Hypothese bestimmen (aufschreiben!)
+\item Bestimmen des zu verwendenden Tests (Ja/Nein-Experimente, Diskrete Verteilung, Kontinuierliche Verteilung). Siehe Kapitel \ref{section-tests}. 
+\item Berechnungen je nach Test-Art durchführen
+\item Akzeptable Fehlerrate $\alpha$ festlegen, entsprechende Schwelle bestimmen (Tabellen)
+\item Wenn die Schwelle überschritten wird kann die Null-Hypothese verworfen werden, sonst nicht.
+\end{enumerate}
+
 \end{document}
